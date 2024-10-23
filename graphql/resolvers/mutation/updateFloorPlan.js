@@ -18,6 +18,13 @@ const InvisibleNodeModel = model("InvisibleNode", invisibleNodeSchema )
 
 // This is for the graphql resolver
 const Node = require("../node")
+const {
+  createLog,
+  formatModel,
+  updateLog
+} = require("../../../utils/createLog")
+const Floor = require("../floor")
+const InvisibleNode = require("../invisibleNode")
 
 // Remember to change the function to updateFloor
 
@@ -37,24 +44,94 @@ const updateFloorPlan = async ({
   // Mapping name of new nodes to the newly created nodes
   const nameMap = new Map()
   // Work on keeping this in functions since they are reused (updateNode e.t.c)
-  for(const nodeInput of updateNodeInputs) {
-    if(nodeInput.isDeleted){
-      await NodeModel.findOneAndDelete({
-        _id: new ObjectId(`${nodeInput.id}`)
+  const currentFloor = await Floor.build(id, context)
+  const currentBuilding = await currentFloor.building()
+  for(const {id, name, state, isExit, ui, isDeleted} of updateNodeInputs) {
+    const logs = [], updateLogs = []
+    if(isDeleted){
+      const node = await NodeModel.findOneAndDelete({
+        _id: new ObjectId(`${id}`)
       })
+      updateLog("node", node.id, node.name)
+      createLog("NODE_DELETED", `Node ${node.name} on ${formatModel(currentFloor, "floor", "Floor")} has been deleted`,
+      {
+        floors: [currentFloor.id],
+        buildings: [currentBuilding.id]
+      })
+      // Create a logic to update the node logs on delete and when the name's been updated
       continue
     }
-    const node = await NodeModel.findById(nodeInput.id)
+    const node = await NodeModel.findById(id)
 
     if(!node) throw new Error("Node not found")
 
 
-    if(nodeInput.name) node.name = nodeInput.name
-    if(nodeInput.state) node.state = nodeInput.state
-    if(nodeInput.isExit) node.isExit = nodeInput.isExit
-    if(nodeInput.ui) node.ui = nodeInput.ui
+    if(name?.length && name !== node.name) {
+      const oldName = node.name
+      node.name = name
+      updateLogs.push(["node", node.id, oldName, node.name])
+      logs.push(["NODE_NAME_CHANGE", `Node ${oldName} on ${formatModel(currentFloor, "floor", "Floor")} has been renamed to ${formatModel(node, "node")}`, {
+        buildings: [currentBuilding.id],
+        floors: [currentFloor.id],
+        nodes: [node.id]
+      }])
+    }
+    if(state?.length && state !== node.state){
+      switch(state){
+        case "safe":
+          logs.push(["NODE_SAFE", `${formatModel(node, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")} is now safe`, {
+            buildings: [currentBuilding.id],
+            floors: [currentFloor.id],
+            nodes: [node.id]
+          }])
+          break
+        case "stuck":
+          logs.push(["NODE_STUCK", `There is currently no way out from ${formatModel(node, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")}`, {
+            buildings: [currentBuilding.id],
+            floors: [currentFloor.id],
+            nodes: [node.id]
+          }])
+          break
+        case "compromised":
+          logs.push(["NODE_COMPROMISED", `${formatModel(node, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")} has detected fire!`, {
+            buildings: [currentBuilding.id],
+            floors: [currentFloor.id],
+            nodes: [node.id]
+          }])
+          break
+        default:
+          logs.push(["NODE_STATE_CHANGE", `${formatModel(node, "node", "Node")} state has been changed on ${formatModel(currentFloor, "floor", "Floor")}`, {
+            buildings: [currentBuilding.id],
+            floors: [currentFloor.id],
+            nodes: [node.id]
+          }])
+          break
+      }
+      node.state = state
+      // Keep different states for on fire, stuck and stuff like that
+    }
+    if(typeof isExit === "boolean" && isExit != node.isExit){
+      logs.push(["NODE_EXIT", `${formatModel(node, "node", "Node")} has been assigned as an exit on ${formatModel(currentFloor, "floor", "Floor")}`, {
+        buildings: [currentBuilding.id],
+        floors: [currentFloor.id],
+        nodes: [node.id]
+      }])
+      node.isExit = isExit
+    }
+    if(ui && (ui?.x !== node.ui.x || ui?.y !== node.ui.y)){
+      logs.push(["NODE_LOCATION_CHANGED", `${formatModel(node, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")} has been moved`, {
+        buildings: [currentBuilding.id],
+        floors: [currentFloor.id],
+        nodes: [node.id]
+      }])
+      node.ui = ui
+    }
 
     await node.save()
+
+    for(const [modelType, id, oldName, newName] of updateLogs)updateLog(modelType, id, oldName, newName)
+
+    for(const [type, message, ids] of logs)createLog(type, message, ids)
 
     nodes.push(node)
   }
@@ -75,6 +152,11 @@ const updateFloorPlan = async ({
     node = new NodeModel(args)
 
     await node.save()
+    createLog("NODE_CREATED", `${formatModel(node, "node", "Node")} has been created on ${formatModel(currentFloor, "floor", "Floor")}`, {
+      buildings: [currentBuilding.id],
+      floors: [currentFloor.id],
+      nodes: [node.id]
+    })
   
     nameMap.set(node.name, node)
     nodes.push(node)
@@ -88,8 +170,15 @@ const updateFloorPlan = async ({
   // create functions for repeated logic to make code less lengthy
   for(const invisibleNodeInput of updateInvisibleNodeInputs) {
     if(invisibleNodeInput.isDeleted){
-      await InvisibleNodeModel.findOneAndDelete({
+      let invisibleNode = await InvisibleNodeModel.findOneAndDelete({
         _id: new ObjectId(`${invisibleNodeInput.id}`)
+      })
+      invisibleNode = new InvisibleNode(invisibleNode, context)
+      const [firstNode, secondNode] = await invisibleNode.connectedNodes()
+      createLog("NODES_DISCONNECTED", `${formatModel(firstNode, "node", "Node")} has been disconnected from ${formatModel(secondNode, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")}`, {
+        buildings: [currentBuilding.id],
+        floors: [currentFloor.id],
+        nodes: [firstNode.id, secondNode.id]
       })
       return
     }
@@ -165,6 +254,14 @@ const updateFloorPlan = async ({
 
     invisibleNode.connectedNodes = connections
     await invisibleNode.save()
+    const resolvedInvisibleNode = new InvisibleNode(invisibleNode, context)
+    const [firstNode, secondNode] = await resolvedInvisibleNode.connectedNodes()
+    createLog("NODES_CONNECTED", `${formatModel(firstNode, "node", "Node")} has been connected to ${formatModel(secondNode, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")}`, {
+      buildings: [currentBuilding.id],
+      floors: [currentFloor.id],
+      nodes: [firstNode.id, secondNode.id]
+    })
+
   }
 
   // Save new nodes and update the nodes array to have the resolver

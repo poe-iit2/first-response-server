@@ -3,6 +3,11 @@ const { buildingSchema } = require("../../../models/building")
 const BuildingModel = model("Building", buildingSchema )
 
 const Building = require("../building")
+const {
+  createLog,
+  formatModel,
+  updateLog
+} = require("../../../utils/createLog")
 
 const updateBuilding = async ({
   updateBuildingInput: { id, name, isDeleted }
@@ -17,12 +22,30 @@ const updateBuilding = async ({
 
   if(isDeleted) {
     await building.deleteOne()
+    updateLog("building", building.id, building.name)
+    createLog("BUILDING_DELETED", `Building ${building.name} has been deleted`)
+    // Maybe remove all entries of building in logs? or just keep the name?? Yeahhh
     return null
   }
-  
-  building.name = name
+
+  const logs = []
+  const updateLogs = []
+  if(name !== building.name){
+    const oldName = building.name
+    building.name = name
+    updateLogs.push(["building", building.id, oldName, building.name])
+    logs.push(["BUILDING_NAME_CHANGE", `Building ${oldName} has been renamed to ${formatModel(building, "building")}`, {
+      buildings: [id]
+    }])
+  }
   
   await building.save()
+  for(const [modelType, id, oldName, newName] of updateLogs){
+    updateLog(modelType, id, oldName, newName)
+  }
+  for(const [type, message, ids] of logs){
+    createLog(type, message, ids)
+  }
   return new Building(building, context)
 }
 
