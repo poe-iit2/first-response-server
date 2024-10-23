@@ -41,8 +41,6 @@ const getLogs = async ({ logInput }, context) => {
   if(isNaN(pageCount))pageCount = 20
   if(date !== 1)date = -1
 
-  console.log(nodes, floors, buildings, status, date)
-
   const skip = (page - 1) * pageCount
 
   const filter = {}
@@ -50,7 +48,6 @@ const getLogs = async ({ logInput }, context) => {
   if(filters.length){
     filter["$or"] = filters
   }
-  console.log(filter)
 
   const pipeline = [
     { $match: filter },

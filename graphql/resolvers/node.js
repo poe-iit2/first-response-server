@@ -22,7 +22,6 @@ class Node {
     if(!context?.isAuth) throw new Error("Error retrieving Node data. You are not authenticated.")
     this.context = context
     this.node = node
-    // console.log(node)
     this.id = node.id || ""
     this.name = node.name || ""
     this.state = node.state

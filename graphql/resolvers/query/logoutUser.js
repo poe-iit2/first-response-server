@@ -4,7 +4,6 @@ const Status = require("../status")
 // Define an asynchronous function to authenticate a user based on the provided 'email' and 'password'
 // The function expects an object with an 'email' and 'password' property
 const logoutUser = async (_, context) => {
-  console.log("Called")
   context.isAuth = false
   context.user = null
   context.response.cookie('token', "", {
