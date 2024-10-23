@@ -1,20 +1,8 @@
 // Destructure Schema from Mongoose to define a schema for a MongoDB collection
-const { Schema } = require("mongoose")
+const { Schema, Types: { ObjectId} } = require("mongoose")
 
 // Define a schema for a "Log" collection
 const logSchema = new Schema({
-  building: {
-    type: String,
-    required: true
-  },
-  floor: {
-    type: String,
-    required: true
-  },
-  node: {
-    type: String,
-    required: true
-  },
   type: {
     type: String,
     required: true
@@ -22,7 +10,20 @@ const logSchema = new Schema({
   message: {
     type: String,
     required: true
-  }
+  },
+  buildings: [{
+    type: ObjectId,
+    ref: "Building"
+  }],
+  floors: [{
+    type: ObjectId,
+    ref: "Floor"
+  }],
+  nodes: [{
+    type: ObjectId,
+    ref: "Node"
+  }],
+  priority: Number
 }, {
   // Add createdAt and updatedAt timestamps to the schema automatically
   timestamps: true
