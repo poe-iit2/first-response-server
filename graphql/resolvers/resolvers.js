@@ -14,6 +14,7 @@ const { getBuildings } = require("./query/getBuildings")
 const { getFloor } = require("./query/getFloor")
 const { getFloorPlan } = require("./query/getFloorPlan")
 const { getFloors } = require("./query/getFloors")
+const { getLogs } = require("./query/getLogs")
 const { loginUser } = require("./query/loginUser")
 const { logoutUser } = require("./query/logoutUser")
 const { validateSession } = require("./query/validateSession")
@@ -37,6 +38,7 @@ const resolvers = {
   getFloor,
   getFloorPlan,
   getFloors,
+  getLogs,
   loginUser,
   logoutUser,
   validateSession,
