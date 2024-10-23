@@ -14,11 +14,12 @@ const getBuildings = require("./query/getBuildings")
 const getFloor = require("./query/getFloor")
 const getFloorPlan = require("./query/getFloorPlan")
 const getFloors = require("./query/getFloors")
+const getLogs = require("./query/getLogs")
 const loginUser = require("./query/loginUser")
-const logoutUser = require("./query/logoutUser");
+const logoutUser = require("./query/logoutUser")
 const validateSession = require("./query/validateSession")
 
-const floorUpdate = require("./subscription/floorUpdate");
+const floorUpdate = require("./subscription/floorUpdate")
 const sendHello = require("./subscription/sendHello")
 
 const building = require("./building")
@@ -27,18 +28,21 @@ const floorPlan = require("./floorPlan")
 const floorImage = require("./floorImage")
 const hello = require("./hello")
 const invisibleNode = require("./invisibleNode")
+const log = require("./log")
+const logOutput = require("./logOutput")
 const node = require("./node")
 const nodeUI = require("./nodeUI")
-const signature = require("./signature");
+const signature = require("./signature")
 const status = require("./status")
-const user = require("./user");
+const user = require("./user")
 
 const buildingInput = require("./buildingInput")
 const floorImageInput = require("./floorImageInput")
 const floorInput = require("./floorInput")
 const invisibleNodeInput = require("./invisibleNodeInput")
 const nodeInput = require("./nodeInput")
-const nodeUIInput = require("./nodeUIInput")
+const nodeUIInput = require("./nodeUIInput");
+const logInput = require("./logInput");
 
 const schema = buildSchema(`
   type Mutation {
@@ -58,6 +62,7 @@ const schema = buildSchema(`
     ${getFloor.schema}
     ${getFloorPlan.schema}
     ${getFloors.schema}
+    ${getLogs.schema}
     ${loginUser.schema}
     ${validateSession.schema}
     ${logoutUser.schema}
@@ -75,6 +80,7 @@ const schema = buildSchema(`
   ${floorInput.updateFloorInput.schema}
   ${invisibleNodeInput.createInvisibleNodeInput.schema}
   ${invisibleNodeInput.updateInvisibleNodeInput.schema}
+  ${logInput.schema}
   ${nodeInput.createNodeInput.schema}
   ${nodeInput.nodeReferenceInput.schema}
   ${nodeInput.updateNodeInput.schema}
@@ -86,6 +92,8 @@ const schema = buildSchema(`
   ${floorImage.schema}
   ${hello.schema}
   ${invisibleNode.schema}
+  ${log.schema}
+  ${logOutput.schema}
   ${node.schema}
   ${nodeUI.schema}
   ${signature.schema}
