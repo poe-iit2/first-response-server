@@ -1,5 +1,6 @@
 const { model } = require("mongoose")
 const { nodeSchema } = require("../../models/node")
+const Floor = require("./floor")
 
 const NodeModel = model("Node", nodeSchema)
 
@@ -27,6 +28,8 @@ class Node {
     this.state = node.state
     this.isExit = node.isExit
     this.ui = node.ui
+    this.updatedAt = node.updatedAt
+    this.createdAt = node.createdAt
   }
 
   async connections() {
@@ -46,6 +49,12 @@ class Node {
     }
 
     return connections
+  }
+
+  async floor() {
+    const floorId = this.node.floor
+    const floor = await Floor.build(floorId, this.context)
+    return floor
   }
 }
 
