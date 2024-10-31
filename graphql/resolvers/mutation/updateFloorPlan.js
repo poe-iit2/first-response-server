@@ -15,9 +15,7 @@ const InvisibleNodeModel = model("InvisibleNode", invisibleNodeSchema )
 // Commenting for sanity
 // TODO: Use chatgpt later
 
-
-// This is for the graphql resolver
-const Node = require("../node")
+const FloorPlan = require("../floorPlan")
 const {
   createLog,
   formatModel,
@@ -40,7 +38,6 @@ const updateFloorPlan = async ({
   if(!context?.isAuth) throw new Error("Error creating Node. You are not authenticated.")
 
   // Array of Node resolvers to be returned
-  const nodes = []
   // Mapping name of new nodes to the newly created nodes
   const nameMap = new Map()
   // Work on keeping this in functions since they are reused (updateNode e.t.c)
@@ -132,8 +129,6 @@ const updateFloorPlan = async ({
     for(const [modelType, id, oldName, newName] of updateLogs)updateLog(modelType, id, oldName, newName)
 
     for(const [type, message, ids] of logs)createLog(type, message, ids)
-
-    nodes.push(node)
   }
 
   // This guy creates the new nodes and adds them to the nodes array
@@ -159,7 +154,6 @@ const updateFloorPlan = async ({
     })
   
     nameMap.set(node.name, node)
-    nodes.push(node)
   }
 
   // For each invisible node
@@ -264,13 +258,9 @@ const updateFloorPlan = async ({
 
   }
 
-  // Save new nodes and update the nodes array to have the resolver
-  for(let i = 0; i < nodes.length; i++) {
-    nodes[i] = await Node.build(nodes[i].id, context) // new Node(nodes[i], context)
-  }
+  const floorPlan = await FloorPlan.build(id, context)
 
-  // Return the array of resolvers
-  return nodes
+  return floorPlan
 }
 
 // Create a database for invisible nodes
