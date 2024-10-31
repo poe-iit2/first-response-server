@@ -33,13 +33,13 @@ const updateFloor = async ({
     return null
   }
   const logs = [], updateLogs = []
-  if(name !== floor.name){
+  if(name?.length && name !== floor.name){
     const oldName = floor.name
     floor.name = name
     updateLogs.push(["floor", floor.id, oldName, floor.name])
     logs.push(["FLOOR_NAME_CHANGE", `Floor ${oldName} on ${formatModel(currentBuilding, "building", "Building")} has been renamed to ${formatModel(floor, "floor")}`])
   }
-  if(buildingId !== floor.building.to){
+  if(buildingId?.length && buildingId !== floor.building._id.toString()){
     try{
       const newBuilding = await Building.build(buildingId, context)
       logs.push(["FLOOR_RELOCATED", `${formatModel(floor, "floor", "Floor")} has been moved to ${formatModel(newBuilding, "building", "Building")} from ${formatModel(currentBuilding, "building", "Building")} `, {
@@ -51,7 +51,7 @@ const updateFloor = async ({
     }
     floor.building = buildingId
   }
-  if(image !== floor.image){
+  if(image && image !== floor.image){
     // I haven't done image yet..., please work on that
     // Also work on making the ()[][] a callable function for readability
     logs.push(["FLOOR_IMAGE_UPLOADED", `A new image has been uploaded to ${formatModel(floor, "floor", "Floor")} in ${formatModel(currentBuilding, "building", "Building")}`, {

@@ -30,7 +30,7 @@ const updateBuilding = async ({
 
   const logs = []
   const updateLogs = []
-  if(name !== building.name){
+  if(name?.length && name !== building.name){
     const oldName = building.name
     building.name = name
     updateLogs.push(["building", building.id, oldName, building.name])
