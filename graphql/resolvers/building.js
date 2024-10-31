@@ -34,7 +34,7 @@ class Building {
 
     const response = []
     for(const floor of floors) {
-      response.push(await Floor.build(floor.id, this.context))
+      response.push(await Floor.build(floor._id, this.context))
     }
     return response
   }

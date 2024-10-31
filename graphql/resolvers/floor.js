@@ -17,7 +17,6 @@ class Floor {
 
   constructor(floor, context) {
     if(!context?.isAuth) throw new Error("Error retrieving Floor data. You are not authenticated.")
-    const Node = require("./node")
     this.context = context
     this.floor = floor
 

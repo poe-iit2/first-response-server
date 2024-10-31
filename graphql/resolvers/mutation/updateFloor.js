@@ -1,4 +1,4 @@
-const { model } = require("mongoose")
+const { model, Types: { ObjectId} } = require("mongoose")
 const { floorSchema } = require("../../../models/floor")
 const FloorModel = model("Floor", floorSchema )
 
@@ -15,15 +15,15 @@ const updateFloor = async ({
 }, context) => {
   if(!context?.isAuth) throw new Error("Error updating Floor. You are not authenticated.")
 
-  const currentBuilding = await Building.build(floor.building, context)
   const floor = await FloorModel.findById(id)
+  const currentBuilding = await Building.build(floor.building, context)
 
   if(!floor) {
     throw new Error(`Floor ${id} not found`)
   }
 
   if(isDeleted) {
-    await floor.deleteOne()
+    await FloorModel.findOneAndDelete({_id: new ObjectId(`${id}`)})
     updateLog("floor", floor.id, floor.name)
     createLog("FLOOR_DELETED", `Floor ${floor.name} on ${formatModel(currentBuilding, "building", "Building")} has been deleted`,
     {
