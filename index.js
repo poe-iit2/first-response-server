@@ -79,7 +79,7 @@ mongoose.connect(process.env.DATABASE_URL).then(() => {
     console.log(`[${process.env.NODE_ENV}] GraphQL Server running on http://localhost:${sAddress.port}/graphql`)
 
     // Websocket configuration for GraphQL subscriptions
-    const path = "/subscription"
+    const path = "/"
     const wsServer = new WebSocket.Server({
       server,
       path
