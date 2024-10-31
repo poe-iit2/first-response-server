@@ -39,18 +39,37 @@ const nodeSchema = new Schema({
 
 // Add a post-save hook to the schema
 nodeSchema.post("findOneAndDelete", async (doc) => {
+  const { logSchema } = require("./log")
   const { floorSchema } = require("./floor")
   const { invisibleNodeSchema } = require("./invisibleNode")
+  const LogModel = model("Log", logSchema)
   const FloorModel = model("Floor", floorSchema )
   const InvisibleNodeModel = model("InvisibleNode", invisibleNodeSchema )
+
+  const logs = await LogModel.find({
+    nodes: { $in: [doc.id]}
+  })
+
+  for(const log of logs){
+    const regex = new RegExp(`\\(([^\\)]*)(${doc.name})([^\\)]*)\\)\\[node\\]\\[${doc.id}\\]`, 'g')
+
+    log.message = log.message.replace(regex, (match, prefix, oldName, suffix) => {
+      return `${prefix}${oldName}${suffix}`
+    })
+
+    log.nodes = log.nodes.filter(nodeId => nodeId.toString() !== doc.id)
+
+    await log.save()
+  }
 
   const floorId = doc.floor.toString()
   const floor = await FloorModel.findById(floorId)
 
-  if(!floor) throw new Error("Floor not found")
+  if(floor){
+    floor.nodes = floor.nodes.filter(node => node._id.toString() !== doc._id.toString())
+    await floor.save()
+  }
 
-  floor.nodes = floor.nodes.filter(node => node._id.toString() !== doc._id.toString())
-  await floor.save()
 
   const invisibleNodes = await InvisibleNodeModel.find({ connectedNodes: { $in: doc._id } })
   for(const invisibleNode of invisibleNodes) {
@@ -71,9 +90,13 @@ nodeSchema.post("save", async (doc) => {
 
   const floor = await FloorModel.findById(floorId)
 
-  if(!floor) throw new Error("Floor not found")
+  // This could happen because the floor got deleted, triggering the floor
+  // middleware, which triggers the node delete middleware which triggers the
+  // invisibleNode middleware, which triggers the node save system
+  if(!floor) return
   
   floor.nodes = floor.nodes.filter(node => node._id.toString() !== doc._id.toString())
+  // console.log(doc._id, doc.id)
   floor.nodes.push(doc._id)
   await floor.save()
 

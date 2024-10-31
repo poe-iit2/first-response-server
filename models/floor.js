@@ -57,6 +57,47 @@ floorSchema.post("save", async (doc) => {
   await building.save()
 })
 
+floorSchema.post("findOneAndDelete", async (doc) => {
+  const { logSchema } = require("./log")
+  const { nodeSchema } = require("./node")
+  const { buildingSchema } = require("./building")
+  const LogModel = model("Log", logSchema)
+  const NodeModel = model("Node", nodeSchema)
+  const BuildingModel = model("Building", buildingSchema)
+
+  const logs = await LogModel.find({
+    floors: { $in: [doc.id]}
+  })
+
+  for(const log of logs){
+    const regex = new RegExp(`\\(([^\\)]*)(${doc.name})([^\\)]*)\\)\\[floor\\]\\[${doc.id}\\]`, 'g')
+
+    log.message = log.message.replace(regex, (match, prefix, oldName, suffix) => {
+      return `${prefix}${oldName}${suffix}`
+    })
+
+    log.floors = log.floors.filter(floorId => floorId.toString() !== doc.id)
+
+    await log.save()
+  }
+
+  const nodes = doc.nodes
+
+  for(const node of nodes){
+    await NodeModel.findOneAndDelete({ 
+      _id: node._id
+    })
+  }
+
+  const building = await BuildingModel.findById(doc.building)
+
+  if(building){
+    building.floors = building.floors.filter(floorId => floorId._id.toString() !== doc._id.toString())
+
+    await building.save()
+  }
+})
+
 // Export the floor schema as part of an object
 module.exports = {
   floorSchema
