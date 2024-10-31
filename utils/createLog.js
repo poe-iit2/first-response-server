@@ -46,23 +46,7 @@ const updateLog = async (modelType, id, oldName, newName) => {
       return `${prefix}${oldName}${suffix}`
     })
 
-    if(!newName?.length){
-      switch(modelType){
-        case "node":
-          log.nodes = log.nodes.filter(nodeId => nodeId.toString() !== id)
-          break
-        case "floor":
-          log.floors = log.floors.filter(floorId => floorId.toString() !== id)
-          break
-        case "building":
-          log.buildings = log.buildings.filter(buildingId => buildingId.toString() !== id)
-          break
-        default:
-          break
-      }
-    }
-
-    log.save()
+    await log.save()
   }
 
   // text.replace(regex, (match, prefix, oldName, suffix) => `(${prefix}Tomiwa${suffix})[node][Hey hey hey]`)
