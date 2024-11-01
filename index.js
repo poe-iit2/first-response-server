@@ -110,6 +110,12 @@ mongoose.connect(process.env.DATABASE_URL).then(() => {
       },
       onComplete: (ctx, msg) => {
         console.log('Complete');
+      },
+      onOperation: (ctx, msg) => {
+        console.log('Operation');
+      },
+      onClose: (ctx, msg) => {
+        console.log(ctx.extra.request.headers)
       }
     }, wsServer)
 
