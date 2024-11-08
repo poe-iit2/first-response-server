@@ -97,25 +97,25 @@ mongoose.connect(process.env.DATABASE_URL).then(() => {
       execute,
       subscribe,
       onConnect: (ctx) => {
-        console.log('Connect');
+        console.log('Connect')
       },
       onSubscribe: (ctx, msg) => {
-        console.log('Subscribe');
+        console.log('Subscribe')
       },
       onNext: (ctx, msg, args, result) => {
-        console.debug('Next');
+        console.debug('Next')
       },
       onError: (ctx, msg, errors) => {
-        console.error('Error');
+        console.error('Error')
       },
       onComplete: (ctx, msg) => {
-        console.log('Complete');
+        console.log('Complete')
       },
       onOperation: (ctx, msg) => {
-        console.log('Operation');
+        console.log('Operation')
       },
       onClose: (ctx, msg) => {
-        console.log(ctx.extra.request.headers)
+        console.log("Close")
       }
     }, wsServer)
 
