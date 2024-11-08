@@ -4,6 +4,8 @@ const { model,Schema } = require("mongoose")
 // Destructure ObjectId type from Mongoose to use it as a reference type in the schema
 const { ObjectId } = require("mongoose").Types
 
+const pubsub = require("../utils/pubsub")
+
 // Define a schema for a "Floor" collection
 const floorSchema = new Schema({
   name: {
@@ -42,6 +44,11 @@ const floorSchema = new Schema({
 })
 
 floorSchema.post("save", async (doc) => {
+  pubsub.publish("FLOOR_UPDATE", {
+    floorUpdate: Floor.build(doc.id, {
+      isAuth: true
+    })
+  })
   const { buildingSchema } = require("./building")
   const BuildingModel = model("Building", buildingSchema )
 
