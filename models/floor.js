@@ -44,6 +44,8 @@ const floorSchema = new Schema({
 })
 
 floorSchema.post("save", async (doc) => {
+  // Import the Floor resolver to handle fetching floor data
+  const Floor = require("../graphql/resolvers/floor")
   pubsub.publish("FLOOR_UPDATE", {
     floorUpdate: Floor.build(doc.id, {
       isAuth: true
