@@ -9,6 +9,7 @@ const nodeSchema = `
     ui: NodeUI
     updatedAt: String!
     createdAt: String!
+    direction: String
   }
 `
 

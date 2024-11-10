@@ -31,8 +31,12 @@ class InvisibleNode {
   async connectedNodes() {
     const Node = require("./node")
     const connections = []
-    connections.push(await Node.build(this.invisibleNode.connectedNodes[0], this.context))
-    connections.push(await Node.build(this.invisibleNode.connectedNodes[1], this.context))
+    const firstNode = await Node.build(this.invisibleNode.connectedNodes[0], this.context)
+    const secondNode = await Node.build(this.invisibleNode.connectedNodes[1], this.context)
+    firstNode.direction = "xy"
+    secondNode.direction = "yx"
+    connections.push(firstNode)
+    connections.push(secondNode)
 
     return connections
   }
