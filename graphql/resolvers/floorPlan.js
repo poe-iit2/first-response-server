@@ -8,7 +8,7 @@ const Floor = require("./floor")
 class FloorPlan extends Floor {
   static async build(floorId, context) {
     if(!context?.isAuth) throw new Error("Error retrieving data. You are not authenticated.")
-    const floor = await FloorModel.findById(floorId)
+    const floor = await FloorModel.findById(floorId).exec()
 
     if (!floor) {
       throw new Error(`Floor ${floorId} not found`)
@@ -18,17 +18,6 @@ class FloorPlan extends Floor {
 
   constructor(floor, context) {
     super(floor, context)
-  }
-  
-  async invisibleNodes() {
-    const nodeIds = this.floor.nodes
-    const { invisibleNodeSchema } = require("../../models/invisibleNode")
-    const InvisibleNodeModel = model("InvisibleNode", invisibleNodeSchema)
-    const InvisibleNode = require("./invisibleNode")
-    
-    const invisibleNodes = await InvisibleNodeModel.find({ connectedNodes: { $in: nodeIds } })
-
-    return invisibleNodes.map(invisibleNode => new InvisibleNode(invisibleNode, this.context))
   }
 }
 
