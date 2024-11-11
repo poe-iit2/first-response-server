@@ -26,7 +26,8 @@ const logSchema = new Schema({
   priority: Number
 }, {
   // Add createdAt and updatedAt timestamps to the schema automatically
-  timestamps: true
+  timestamps: true,
+  versionKey: false
 })
 
 // Export the log schema as part of an object

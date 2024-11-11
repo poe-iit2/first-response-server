@@ -40,7 +40,8 @@ const floorSchema = new Schema({
   }
 }, {
   // Add createdAt and updatedAt timestamps to the schema automatically
-  timestamps: true
+  timestamps: true,
+  versionKey: false
 })
 
 floorSchema.post("save", async (doc) => {

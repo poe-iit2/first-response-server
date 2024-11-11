@@ -42,7 +42,8 @@ const nodeSchema = new Schema({
   }
 }, {
   // Add createdAt and updatedAt timestamps to the schema automatically
-  timestamps: true
+  timestamps: true,
+  versionKey: false
 })
 
 // Add a post-save hook to the schema

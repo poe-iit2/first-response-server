@@ -16,7 +16,8 @@ const buildingSchema = new Schema({
   }]
 }, {
   // Add createdAt and updatedAt timestamps to the schema automatically
-  timestamps: true
+  timestamps: true,
+  versionKey: false
 })
 
 buildingSchema.post("findOneAndDelete", async (doc) => {
