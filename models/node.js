@@ -18,9 +18,17 @@ const nodeSchema = new Schema({
     ref: "Floor",
     required: true
   },
+  direction: String,
   connections: [{
-    type: ObjectId,
-    ref: "InvisibleNode"
+    id: {
+      type: ObjectId,
+      ref: "Node",
+      required: true
+    },
+    direction: {
+      type: String,
+      required: true
+    }
   }], // Array of connections
   ui: {
     x: {

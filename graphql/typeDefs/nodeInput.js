@@ -4,6 +4,7 @@ const createNodeInputSchema = `
     state: String!
     isExit: Boolean!
     ui: NodeUIInput!
+    connections: [NodeReferenceInput]
   }
 `
 // I need operation so I can know what to do with the node
@@ -11,19 +12,21 @@ const createNodeInputSchema = `
 
 const nodeReferenceInputSchema = `
   input NodeReferenceInput {
-    name: String
+    name: String!
     id: String
+    direction: String!
   }
 `
 
 const updateNodeInputSchema = `
   input UpdateNodeInput {
-    id: ID!
-    name: String
+    id: ID
+    name: String!
     state: String
     isExit: Boolean
     ui: NodeUIInput
-    isDeleted: Boolean
+    connections: [NodeReferenceInput]
+    operation: String
   }
 `
 
