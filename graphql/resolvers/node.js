@@ -10,7 +10,7 @@ class Node {
   static async build(nodeId, context) {
     if(!context?.isAuth) throw new Error("Error retrieving Node data. You are not authenticated.")
 
-    const node = await NodeModel.findById(nodeId)
+    const node = await NodeModel.findById(nodeId).exec()
     if (!node) {
       throw new Error(`Node ${nodeId} not found`)
     }
@@ -33,17 +33,17 @@ class Node {
 
   async connections() {
     const connections = []
-    const InvisibleNode = require("./invisibleNode")
 
     const invisibleNodes = this.node.connections
-    for(const invisibleNodeId of invisibleNodes) {
-      const invisibleNode = await InvisibleNode.build(invisibleNodeId, this.context)
-
-      const connectedNodes = await invisibleNode.connectedNodes()
-      if(connectedNodes[0].id === this.id) {
-        connections.push(connectedNodes[1])
-      }else {
-        connections.push(connectedNodes[0])
+    for(const invisibleNode of invisibleNodes) {
+      try {
+        const node = await NodeModel.findById(invisibleNode.id)
+        if(!node) continue
+        connections.push(new Node(node, this.context))
+        connections.at(-1).direction = invisibleNode.direction
+      } catch (error) {
+        console.log(error)
+        continue
       }
     }
 
