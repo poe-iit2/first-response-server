@@ -7,7 +7,7 @@ const FloorModel = model("Floor", floorSchema)
 class Floor {
   static async build(floorId, context) {
     if(!context?.isAuth) throw new Error("Error retrieving data. You are not authenticated.")
-    const floor = await FloorModel.findById(floorId)
+    const floor = await FloorModel.findById(floorId).exec()
 
     if (!floor) {
       throw new Error(`Floor ${floorId} not found`)
@@ -51,8 +51,12 @@ class Floor {
     const Node = require("./node")
     const nodes = []
     for(const nodeId of this.floor.nodes) {
-      const node = await Node.build(nodeId, this.context)
-      nodes.push(node)
+      try{
+        const node = await Node.build(nodeId, this.context)
+        nodes.push(node)
+      } catch(e) {
+        continue
+      }
     }
     return nodes
   }

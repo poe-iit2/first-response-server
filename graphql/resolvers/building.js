@@ -8,7 +8,7 @@ const BuildingModel = model("Building", buildingSchema )
 class Building {
   static async build(buildingId, context) {
     if(!context?.isAuth) throw new Error("Error retrieving Building data. You are not authenticated.")
-    const building = await BuildingModel.findById(buildingId)
+    const building = await BuildingModel.findById(buildingId).exec()
 
     if (!building) {
       throw new Error("Building not found")
