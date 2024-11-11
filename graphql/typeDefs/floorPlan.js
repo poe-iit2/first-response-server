@@ -4,7 +4,6 @@ const floorPlanSchema = `
     name: String!
     building: Building!
     nodes: [Node]!
-    invisibleNodes: [InvisibleNode]!
     image: FloorImage
     createdAt: String!
     updatedAt: String!

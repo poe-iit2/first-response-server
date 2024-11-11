@@ -39,7 +39,6 @@ const user = require("./user")
 const buildingInput = require("./buildingInput")
 const floorImageInput = require("./floorImageInput")
 const floorInput = require("./floorInput")
-const invisibleNodeInput = require("./invisibleNodeInput")
 const nodeInput = require("./nodeInput")
 const nodeUIInput = require("./nodeUIInput");
 const logInput = require("./logInput");
@@ -78,8 +77,6 @@ const schema = buildSchema(`
   ${floorImageInput.schema}
   ${floorInput.createFloorInput.schema}
   ${floorInput.updateFloorInput.schema}
-  ${invisibleNodeInput.createInvisibleNodeInput.schema}
-  ${invisibleNodeInput.updateInvisibleNodeInput.schema}
   ${logInput.schema}
   ${nodeInput.createNodeInput.schema}
   ${nodeInput.nodeReferenceInput.schema}

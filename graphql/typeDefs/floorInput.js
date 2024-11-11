@@ -1,8 +1,11 @@
 const createFloorInputSchema = `
   input CreateFloorInput {
+    id: ID
     name: String!
-    buildingId: String!
+    buildingId: ID
     image: FloorImageInput
+    isDeleted: Boolean
+    nodes: [UpdateNodeInput]
   }
 `
 

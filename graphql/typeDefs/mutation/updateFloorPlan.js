@@ -1,7 +1,7 @@
 // Change this to update Floor
 
 const updateFloorPlanSchema = `
-  updateFloorPlan(createNodeInputs: [CreateNodeInput]!, createInvisibleNodeInputs: [CreateInvisibleNodeInput]!,updateNodeInputs: [UpdateNodeInput]!, updateInvisibleNodeInputs: [UpdateInvisibleNodeInput]!, id: ID!): FloorPlan
+  updateFloorPlan(createNodeInputs: [CreateNodeInput]!, updateNodeInputs: [UpdateNodeInput]!, id: ID!): FloorPlan
 `
 
 module.exports = {
