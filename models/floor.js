@@ -57,7 +57,7 @@ floorSchema.post("save", async (doc) => {
 
   const buildingId = doc.building
 
-  const building = await BuildingModel.findById(buildingId)
+  const building = await BuildingModel.findById(buildingId.toString())
   if(!building) throw new Error("Building not found")
 
   building.floors = building.floors || []

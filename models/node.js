@@ -48,15 +48,14 @@ const nodeSchema = new Schema({
 
 // Add a post-save hook to the schema
 nodeSchema.post("findOneAndDelete", async (doc) => {
+  if(!doc) return
   const { logSchema } = require("./log")
   const { floorSchema } = require("./floor")
-  const { invisibleNodeSchema } = require("./invisibleNode")
   const LogModel = model("Log", logSchema)
-  const FloorModel = model("Floor", floorSchema )
-  const InvisibleNodeModel = model("InvisibleNode", invisibleNodeSchema )
 
+  if(!doc) return
   const logs = await LogModel.find({
-    nodes: { $in: [doc.id]}
+    nodes: { $in: [doc?.id]}
   })
 
   for(const log of logs){
@@ -71,43 +70,36 @@ nodeSchema.post("findOneAndDelete", async (doc) => {
     await log.save()
   }
 
-  const floorId = doc.floor.toString()
-  const floor = await FloorModel.findById(floorId)
+  // const floorId = doc.floor.toString()
+  // const floor = await FloorModel.findById(floorId)
 
-  if(floor){
-    floor.nodes = floor.nodes.filter(node => node._id.toString() !== doc._id.toString())
-    await floor.save()
-  }
-
-
-  const invisibleNodes = await InvisibleNodeModel.find({ connectedNodes: { $in: doc._id } })
-  for(const invisibleNode of invisibleNodes) {
-    await InvisibleNodeModel.findOneAndDelete({
-      _id: new ObjectId(invisibleNode._id)
-    })
-  }
+  // if(floor){
+  //   floor.nodes = floor.nodes.filter(node => node._id.toString() !== doc._id.toString())
+  //   await floor.save()
+  // }
 })
 
 
 
 // For sanity, I'm doing this so i don't have to worry about it anywhere else
 nodeSchema.post("save", async (doc) => {
-  const { floorSchema } = require("./floor")
-  const FloorModel = model("Floor", floorSchema )
+  // Keep pubsub here
 
-  const floorId = doc.floor
+  // const { floorSchema } = require("./floor")
+  // const FloorModel = model("Floor", floorSchema )
 
-  const floor = await FloorModel.findById(floorId)
+  // const floorId = doc.floor
 
-  // This could happen because the floor got deleted, triggering the floor
-  // middleware, which triggers the node delete middleware which triggers the
-  // invisibleNode middleware, which triggers the node save system
-  if(!floor) return
+  // const floor = await FloorModel.findById(floorId)
+
+  // // This could happen because the floor got deleted, triggering the floor
+  // // middleware, which triggers the node delete middleware which triggers the
+  // // invisibleNode middleware, which triggers the node save system
+  // if(!floor) return
   
-  floor.nodes = floor.nodes.filter(node => node._id.toString() !== doc._id.toString())
-  // console.log(doc._id, doc.id)
-  floor.nodes.push(doc._id)
-  await floor.save()
+  // floor.nodes = floor.nodes.filter(node => node._id.toString() !== doc._id.toString())
+  // floor.nodes.push(doc._id)
+  // await floor.save()
 
 })
 
