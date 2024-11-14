@@ -10,7 +10,7 @@ const User = require("../user")
 // Define an asynchronous function to authenticate a user based on the provided 'email' and 'password'
 // The function expects an object with an 'email' and 'password' property
 const loginUser = async ({ email, password }, context) => {
-  const user = await UserModel.findOne({ email })
+  let user = await UserModel.findOne({ email })
 
   if (!user) {
     throw new Error(`'No user with email: ${email} found`)
@@ -26,12 +26,13 @@ const loginUser = async ({ email, password }, context) => {
   const roles = user.roles
 
   const token = jwt.sign({ userId, roles }, process.env.ACCESS_SECRET, { expiresIn: '3d' })
+  const expiresIn = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 
   context.response.cookie('token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: process.env.NODE_ENV === 'production' ? "None" : undefined,
-    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    expires: expiresIn
   })
   
   context.isAuth = true
@@ -39,8 +40,14 @@ const loginUser = async ({ email, password }, context) => {
     userId,
     roles
   }
-  
-  return new User(user, context)
+
+  // user, token, expiration
+  user = new User(user, context)
+  return {
+    token,
+    expiresIn,
+    user
+  }
 }
 
 // Export the 'loginUser' function to make it accessible from other modules

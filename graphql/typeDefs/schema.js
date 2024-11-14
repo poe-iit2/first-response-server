@@ -29,6 +29,7 @@ const floorImage = require("./floorImage")
 const hello = require("./hello")
 const invisibleNode = require("./invisibleNode")
 const log = require("./log")
+const login = require("./login")
 const logOutput = require("./logOutput")
 const node = require("./node")
 const nodeUI = require("./nodeUI")
@@ -90,6 +91,7 @@ const schema = buildSchema(`
   ${hello.schema}
   ${invisibleNode.schema}
   ${log.schema}
+  ${login.schema}
   ${logOutput.schema}
   ${node.schema}
   ${nodeUI.schema}
