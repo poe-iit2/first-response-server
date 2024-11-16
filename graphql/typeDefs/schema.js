@@ -8,6 +8,7 @@ const updateFloor = require("./mutation/updateFloor")
 const updateFloorPlan = require("./mutation/updateFloorPlan")
 const updateNode = require("./mutation/updateNode")
 
+const deleteImage = require("./query/deleteImage")
 const generateSignature = require("./query/generateSignature");
 const getBuilding = require("./query/getBuilding")
 const getBuildings = require("./query/getBuildings")
@@ -56,6 +57,7 @@ const schema = buildSchema(`
   }
 
   type Query {
+    ${deleteImage.schema}
     ${generateSignature.schema}
     ${getBuilding.schema}
     ${getBuildings.schema}

@@ -8,6 +8,7 @@ const { updateFloor } = require("./mutation/updateFloor")
 const { updateNode } = require("./mutation/updateNode")
 
 // Queries
+const { deleteImage } = require("./query/deleteImage")
 const { generateSignature } = require("./query/generateSignature")
 const { getBuilding } = require("./query/getBuilding")
 const { getBuildings } = require("./query/getBuildings")
@@ -32,6 +33,7 @@ const resolvers = {
   updateFloor,
   updateFloorPlan,
   updateNode,
+  deleteImage,
   generateSignature,
   getBuilding,
   getBuildings,
