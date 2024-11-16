@@ -13,6 +13,7 @@ const {
   formatModel,
   updateLog
 }= require("../../../utils/createLog")
+const deleteImage = require("../../../utils/deleteImage")
 
 const createFloor = async ({
   createFloorInput: { name, id, buildingId, image, isDeleted, nodes }
@@ -71,14 +72,33 @@ const createFloor = async ({
       floor.building = buildingId
     }
 
-    if(image && image !== floor.image){
-      // I haven't done image yet..., please work on that
-      // Also work on making the ()[][] a callable function for readability
-      logs.push(["FLOOR_IMAGE_UPLOADED", `A new image has been uploaded to ${formatModel(floor, "floor", "Floor")} in ${formatModel(currentBuilding, "building", "Building")}`, {
-        buildings: [currentBuilding.id],
-        floors: [floor.id]
-      }])
-      floor.image = image
+    if(
+        (image?.url && image.url !== floor?.image?.url) ||
+        (image?.position && (image.position[0] !== floor?.image?.position[0] || image.position[1] !== floor?.image?.position[1])) ||
+        (image?.scale && (image.scale[0] !== floor?.image?.scale[0] || image.scale[1] !== floor?.image?.scale[1]))
+      ){
+        logs.push(["FLOOR_IMAGE_UPLOADED", `A new image has been uploaded to ${formatModel(floor, "floor", "Floor")} in ${formatModel(currentBuilding, "building", "Building")}`, {
+          buildings: [currentBuilding.id],
+          floors: [floor.id]
+        }])
+      }
+
+    if(image?.url && image.url !== floor?.image?.url){
+      const publicId = floor?.image?.url?.split('/').pop().split('.')[0]
+      deleteImage(publicId)
+      floor.image.url = image.url
+    }
+
+    if(image?.position && image.position[0] !== floor?.image?.position[0] || image.position[1] !== floor?.image?.position[1]){
+      floor.image.position = image.position
+    }
+
+    if(image?.scale && image.scale[0] !== floor?.image?.scale[0] || image.scale[1] !== floor?.image?.scale[1]){
+      floor.image.scale = image.scale
+    }
+
+    if(image?.name && image.name !== floor?.image?.name){
+      floor.image.name = image.name
     }
 
     const nodeMap = new Map()
