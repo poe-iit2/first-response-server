@@ -3,7 +3,7 @@ const floorImageInputSchema = `
     name: String
     url: String
     position: [Float]
-    scale: Float
+    scale: [Float]
   }
 `
 

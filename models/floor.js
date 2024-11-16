@@ -1,6 +1,8 @@
 // Destructure Schema from Mongoose to define a schema for a MongoDB collection
 const { model,Schema } = require("mongoose")
 
+const deleteImage = require("../utils/deleteImage")
+
 // Destructure ObjectId type from Mongoose to use it as a reference type in the schema
 const { ObjectId } = require("mongoose").Types
 
@@ -32,10 +34,13 @@ const floorSchema = new Schema({
     url: {
       type: String,
     },
-    position: [Number],
+    position: {
+      type: [Number],
+      default: [0, 0],
+    },
     scale:{
-      type: Number,
-      default: 1,
+      type: [Number],
+      default: [1, 1],
     }
   }
 }, {
@@ -74,6 +79,9 @@ floorSchema.post("findOneAndDelete", async (doc) => {
   const LogModel = model("Log", logSchema)
   const NodeModel = model("Node", nodeSchema)
   const BuildingModel = model("Building", buildingSchema)
+
+  const publicId = doc?.image?.url?.split('/').pop().split('.')[0]
+  deleteImage(publicId)
 
   const logs = await LogModel.find({
     floors: { $in: [doc.id]}
