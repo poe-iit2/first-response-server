@@ -128,7 +128,7 @@ const createFloor = async ({
             nodes: [node.id]
           }])
         }
-        if(currentNode.state !== node.state){
+        if(node?.state?.length &&currentNode.state !== node.state){
           switch(currentNode.state){
             case "safe":
               logs.push(["NODE_SAFE", `${formatModel(node, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")} is now safe`, {
@@ -161,7 +161,8 @@ const createFloor = async ({
           }
           currentNode.state = node.state
         }
-        if(currentNode.isExit !== node.isExit){
+        
+        if(node.isExit === !!node.isExit && currentNode.isExit !== node.isExit){
           logs.push(["NODE_EXIT", `${formatModel(node, "node", "Node")} has been assigned as an exit on ${formatModel(currentFloor, "floor", "Floor")}`, {
             buildings: [currentBuilding.id],
             floors: [currentFloor.id],
@@ -169,7 +170,7 @@ const createFloor = async ({
           }])
           currentNode.isExit = node.isExit
         }
-        if(currentNode?.ui?.x !== node?.ui?.x || currentNode?.ui?.y !== node?.ui?.y){
+        if(!isNaN(node?.ui?.x) && !isNaN(node?.ui?.y) && (currentNode?.ui?.x !== node?.ui?.x || currentNode?.ui?.y !== node?.ui?.y)){
           logs.push(["NODE_LOCATION_CHANGED", `${formatModel(node, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")} has been moved`, {
             buildings: [currentBuilding.id],
             floors: [currentFloor.id],
@@ -216,7 +217,7 @@ const createFloor = async ({
     // Connection logic
     for(const node of nodes){
       const currentNode = nodeMap.get(node.name)
-      for(const connection of node.connections){
+      if(node?.connections?.length)for(const connection of node.connections){
         // connection -> id, name, direction
         const otherNode = nodeMap.get(connection.name)
         const firstNodeConnection = currentNode.connections.find(c => c.id.toString() === otherNode.id.toString())
@@ -274,28 +275,6 @@ const createFloor = async ({
     console.log(e)
     return null
   }
-
-
-
-
-
-  
-
-  // let floor = await FloorModel.findOne({ name, building: buildingId })
-  // if(floor) throw new Error("Floor already exists")
-
-  // floor = new FloorModel({ name, building: buildingId, image })
-
-  // await floor.save()
-
-  // floor = new Floor(floor, context)
-  // const building = await floor.building()
-  // createLog("FLOOR_CREATED", `${formatModel(floor, "floor", "Floor")} has been created in ${formatModel(building, "building", "Building")}`, {
-  //   buildings: [buildingId],
-  //   floors: [floor.id]
-  // })
-
-  // return floor
 }
 
 module.exports = {

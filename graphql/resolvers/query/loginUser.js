@@ -25,7 +25,7 @@ const loginUser = async ({ email, password }, context) => {
   const userId = user.id
   const roles = user.roles
 
-  const token = jwt.sign({ userId, roles }, process.env.ACCESS_SECRET, { expiresIn: '3d' })
+  const token = jwt.sign({ userId, roles }, process.env.ACCESS_SECRET, { expiresIn: '7d' })
   const expiresIn = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 
   context.response.cookie('token', token, {
