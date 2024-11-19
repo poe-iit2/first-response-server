@@ -6,7 +6,7 @@ const { withFilter } = require("../../../utils/withFilter")
 // 'withFilter' takes two arguments:
 // 1. A function that returns an async iterator for the subscription topic (in this case, "FLOOR_UPDATE")
 // 2. A function that acts as a filter to decide whether the event should be passed to the subscriber
-const floorUpdate =withFilter(
+const floorUpdate = withFilter(
   () => pubsub.asyncIterator("FLOOR_UPDATE"),
   async (payload, variables) => {
     const floorUpdate = await payload.floorUpdate

@@ -22,6 +22,7 @@ const { validateSession } = require("./query/validateSession")
 
 // Subscriptions
 const { floorUpdate } = require("./subscription/floorUpdate")
+const { nodeUpdate } = require("./subscription/nodeUpdate")
 const { sendHello } = require("./subscription/sendHello")
 
 // Resolver
@@ -46,6 +47,7 @@ const resolvers = {
   validateSession,
   subscription: {
     sendHello,
+    nodeUpdate,
     floorUpdate
   }
 }

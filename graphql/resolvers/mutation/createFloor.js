@@ -270,6 +270,7 @@ const createFloor = async ({
     }
     await floor.save()
     floor = await Floor.build(floor.id, context)
+    // TODO: Create the logs in logs, and updateLogs!
     return floor
   } catch(e){
     console.log(e)
