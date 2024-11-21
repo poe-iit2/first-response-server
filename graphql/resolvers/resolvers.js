@@ -21,6 +21,8 @@ const { logoutUser } = require("./query/logoutUser")
 const { validateSession } = require("./query/validateSession")
 
 // Subscriptions
+const { buildingUpdate } = require("./subscription/buildingUpdate")
+const { buildingUpdates } = require("./subscription/buildingUpdates")
 const { floorUpdate } = require("./subscription/floorUpdate")
 const { nodeUpdate } = require("./subscription/nodeUpdate")
 const { sendHello } = require("./subscription/sendHello")
@@ -46,9 +48,11 @@ const resolvers = {
   logoutUser,
   validateSession,
   subscription: {
-    sendHello,
+    buildingUpdate,
+    buildingUpdates,
+    floorUpdate,
     nodeUpdate,
-    floorUpdate
+    sendHello
   }
 }
 

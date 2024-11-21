@@ -20,6 +20,8 @@ const loginUser = require("./query/loginUser")
 const logoutUser = require("./query/logoutUser")
 const validateSession = require("./query/validateSession")
 
+const buildingUpdate = require("./subscription/buildingUpdate")
+const buildingUpdates = require("./subscription/buildingUpdates")
 const floorUpdate = require("./subscription/floorUpdate")
 const nodeUpdate = require("./subscription/nodeUpdate")
 const sendHello = require("./subscription/sendHello")
@@ -72,9 +74,11 @@ const schema = buildSchema(`
   }
 
   type Subscription {
-    ${sendHello.schema}
-    ${nodeUpdate.schema}
+    ${buildingUpdate.schema}
+    ${buildingUpdates.schema}
     ${floorUpdate.schema}
+    ${nodeUpdate.schema}
+    ${sendHello.schema}
   }
 
   ${buildingInput.createBuildingInput.schema}

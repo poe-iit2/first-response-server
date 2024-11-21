@@ -4,6 +4,8 @@ const { model, Schema } = require("mongoose")
 // Destructure ObjectId type from Mongoose to use it as a reference type in the schema
 const { ObjectId } = require("mongoose").Types
 
+const pubsub = require("../utils/pubsub")
+
 // Define a schema for a "Building" collection
 const buildingSchema = new Schema({
   name: {
@@ -18,6 +20,26 @@ const buildingSchema = new Schema({
   // Add createdAt and updatedAt timestamps to the schema automatically
   timestamps: true,
   versionKey: false
+})
+
+buildingSchema.post("save", async (doc) => {
+  const Building = require("../graphql/resolvers/building")
+  const BuildingModel = model("Building", buildingSchema)
+  pubsub.publish("BUILDING_UPDATE", {
+    buildingUpdate: Building.build(doc._id.toString(), {
+      isAuth: true
+    })
+  })
+
+  const buildings = await BuildingModel.find()
+  console.log("Publishing BUILDING_UPDATES")
+  pubsub.publish("BUILDING_UPDATES", {
+    buildingUpdates: buildings.map(
+      building => Building.build(building._id.toString(), {
+        isAuth: true
+      })
+    )
+  })
 })
 
 buildingSchema.post("findOneAndDelete", async (doc) => {
