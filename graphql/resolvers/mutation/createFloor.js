@@ -89,11 +89,11 @@ const createFloor = async ({
       floor.image.url = image.url
     }
 
-    if(image?.position && image.position[0] !== floor?.image?.position[0] || image.position[1] !== floor?.image?.position[1]){
+    if(image?.position?.length === 2 && (image.position[0] !== floor?.image?.position[0] || image.position[1] !== floor?.image?.position[1])){
       floor.image.position = image.position
     }
 
-    if(image?.scale && image.scale[0] !== floor?.image?.scale[0] || image.scale[1] !== floor?.image?.scale[1]){
+    if(image?.scale && (image.scale[0] !== floor?.image?.scale[0] || image.scale[1] !== floor?.image?.scale[1])){
       floor.image.scale = image.scale
     }
 
@@ -128,8 +128,8 @@ const createFloor = async ({
             nodes: [node.id]
           }])
         }
-        if(node?.state?.length &&currentNode.state !== node.state){
-          switch(currentNode.state){
+        if(node?.state?.length && currentNode.state !== node.state){
+          switch(node.state){
             case "safe":
               logs.push(["NODE_SAFE", `${formatModel(node, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")} is now safe`, {
                 buildings: [currentBuilding.id],
@@ -268,6 +268,14 @@ const createFloor = async ({
         await node.save()
       }
     }
+
+    for(const [modelType, id, oldName, newName] of updateLogs){
+      updateLog(modelType, id, oldName, newName)
+    }
+    for(const [type, message, ids] of logs){
+      createLog(type, message, ids)
+    }
+
     await floor.save()
     floor = await Floor.build(floor.id, context)
     // TODO: Create the logs in logs, and updateLogs!

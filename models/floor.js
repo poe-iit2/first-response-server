@@ -66,8 +66,11 @@ floorSchema.post("save", async (doc) => {
   if(!building) throw new Error("Building not found")
 
   building.floors = building.floors || []
-  building.floors = building.floors.filter(floorId => floorId._id.toString() !== doc._id.toString())
-  building.floors.push(doc._id)
+  // Work on getting the position of the id and then adding it back at the same
+  // position
+  if(!building.floors.find(floor => floor._id.toString() === doc._id.toString())){
+    building.floors.push(doc._id)
+  }
 
   await building.save()
 })
@@ -81,7 +84,7 @@ floorSchema.post("findOneAndDelete", async (doc) => {
   const BuildingModel = model("Building", buildingSchema)
 
   const publicId = doc?.image?.url?.split('/').pop().split('.')[0]
-  deleteImage(publicId)
+  if(publicId?.length)deleteImage(publicId)
 
   const logs = await LogModel.find({
     floors: { $in: [doc.id]}
