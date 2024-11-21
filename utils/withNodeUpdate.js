@@ -25,9 +25,6 @@ function withNodeUpdate(
       })
     }
 
-
-    console.log(args, context, info)
-
     // If we get here, the user is not allowed
     const asyncIterator2 = {
       next() {
