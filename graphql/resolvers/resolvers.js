@@ -26,6 +26,8 @@ const { buildingUpdates } = require("./subscription/buildingUpdates")
 const { floorUpdate } = require("./subscription/floorUpdate")
 const { nodeUpdate } = require("./subscription/nodeUpdate")
 const { sendHello } = require("./subscription/sendHello")
+const { deviceUpdate } = require("./subscription/deviceUpdate")
+const { ledUpdate } = require("./subscription/ledUpdate")
 
 // Resolver
 const resolvers = {
@@ -52,7 +54,9 @@ const resolvers = {
     buildingUpdates,
     floorUpdate,
     nodeUpdate,
-    sendHello
+    sendHello,
+    deviceUpdate,
+    ledUpdate
   }
 }
 

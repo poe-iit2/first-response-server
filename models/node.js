@@ -39,7 +39,22 @@ const nodeSchema = new Schema({
       type: Number,
       required: true
     }
+  },
+  motionDetected: {
+    type: Boolean,
+    default: false
+  },
+  temperature: {
+    type: Number
+  },
+  radioSignalStrength: {
+    type: Number
+  },
+  ledState: {
+    type: Boolean,
+    default: false
   }
+
 }, {
   // Add createdAt and updatedAt timestamps to the schema automatically
   timestamps: true,

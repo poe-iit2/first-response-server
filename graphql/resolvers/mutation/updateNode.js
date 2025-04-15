@@ -4,6 +4,7 @@ const NodeModel = model("Node", nodeSchema )
 
 const Node = require("../node")
 const Floor = require("../floor")
+const pubsub = require("../../../utils/pubsub")
 
 const {
   createLog,
@@ -102,6 +103,25 @@ const updateNode = async ({
     }
     await node.save()
 
+        // Publish to DEVICE_UPDATE
+    pubsub.publish("DEVICE_UPDATE", {
+      deviceUpdate: {
+        nodeId: node._id.toString(),
+        motionDetected: node.motionDetected,
+        temperature: node.temperature,
+        radioSignalStrength: node.radioSignalStrength
+      }
+    })
+
+    // Publish to LED_UPDATE
+    pubsub.publish("LED_UPDATE", {
+      ledUpdate: {
+        nodeId: node._id.toString(),
+        ledState: node.ledState
+      }
+    })
+
+    
     for(const [modelType, id, oldName, newName] of updateLogs){
       updateLog(modelType, id, oldName, newName)
     }

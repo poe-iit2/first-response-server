@@ -25,6 +25,8 @@ const buildingUpdates = require("./subscription/buildingUpdates")
 const floorUpdate = require("./subscription/floorUpdate")
 const nodeUpdate = require("./subscription/nodeUpdate")
 const sendHello = require("./subscription/sendHello")
+const deviceUpdate = require("./subscription/deviceUpdate")
+const ledUpdate = require("./subscription/ledUpdate")
 
 const building = require("./building")
 const floor = require("./floor")
@@ -79,6 +81,8 @@ const schema = buildSchema(`
     ${floorUpdate.schema}
     ${nodeUpdate.schema}
     ${sendHello.schema}
+    ${deviceUpdate.schema}
+    ${ledUpdate.schema}
   }
 
   ${buildingInput.createBuildingInput.schema}
@@ -109,5 +113,7 @@ const schema = buildSchema(`
 `)
 
 module.exports = {
-  schema
+  schema,
+  deviceUpdate,
+  ledUpdate
 }
