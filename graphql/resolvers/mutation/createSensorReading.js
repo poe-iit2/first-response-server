@@ -6,7 +6,7 @@ module.exports = {
       sensorId,
       value,
       timestamp: new Date(),
-      status: 'active',  // Can modify the status logic if needed
+      status: 'active',  // You can modify the status logic if needed
     });
 
     return await newReading.save();
