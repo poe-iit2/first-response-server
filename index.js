@@ -16,39 +16,6 @@ const { subscribe, execute } = require("graphql")
 const { schema: graphqlSchema } = require("./graphql/typeDefs/schema");
 const { resolvers } = require("./graphql/resolvers/resolvers");
 
-// Include the new sensor reading type and resolvers
-const sensorReadingTypeDefs = require('./graphql/typeDefs/sensorReading');
-
-// Include the sensor reading resolvers in the main resolvers
-const createSensorReadingResolver = require('./graphql/resolvers/mutation/createSensorReading');
-const getSensorReadingsResolver = require('./graphql/resolvers/query/getSensorReadings');
-
-// Extend resolvers object to include the new sensor reading resolvers
-const extendedResolvers = {
-  Mutation: {
-    ...resolvers.Mutation,
-    createSensorReading: createSensorReadingResolver.createSensorReading,
-  },
-  Query: {
-    ...resolvers.Query,
-    getSensorReadings: getSensorReadingsResolver.getSensorReadings,
-  },
-};
-
-// Extend GraphQL schema to include the new types
-const extendedSchema = [
-  graphqlSchema,
-  sensorReadingTypeDefs,  // Add new typeDefs for SensorReading
-];
-
-// GraphQL API endpoint, enables graphiql UI and sets up schema, resolvers, and context
-app.use("/graphql", graphqlHTTP((req, res) => ({
-  schema: extendedSchema,
-  rootValue: extendedResolvers,
-  context: createContext(req, res),
-  graphiql: true
-})));
-
 // Import /test router
 const test = require("./route/test")
 const headerMiddleWare = require("./middleware/header")
