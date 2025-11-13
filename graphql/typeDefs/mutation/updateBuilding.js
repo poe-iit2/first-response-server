@@ -1,7 +1,3 @@
-const updateBuildingSchema = `
+export const schema = `
   updateBuilding(updateBuildingInput: UpdateBuildingInput!): Building
 `
-
-module.exports = {
-  schema: updateBuildingSchema
-}

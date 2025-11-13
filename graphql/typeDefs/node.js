@@ -1,4 +1,4 @@
-const nodeSchema = `
+export const schema = `
   type Node {
     id: String!
     name: String!
@@ -11,8 +11,4 @@ const nodeSchema = `
     createdAt: String!
     direction: String
   }
-`
-
-module.exports = {
-  schema: nodeSchema
-}
+`;

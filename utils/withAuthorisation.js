@@ -1,7 +1,7 @@
 // We have not yet strictly defined roles
 // So in the meantime I'll create a function that checks if a user role is allowed before continuing
 
-const { $$asyncIterator } = require("iterall")
+import { $$asyncIterator } from "iterall"
 
 function withAuthorisation(
   asyncIteratorFn,
@@ -9,9 +9,9 @@ function withAuthorisation(
 ) {
   return (args, context, info) => {
     allowedRoles = new Set(allowedRoles)
-    
-    if(context?.user)for(const role of context.user.roles) {
-      if(allowedRoles.has(role)) {
+
+    if (context?.user) for (const role of context.user.roles) {
+      if (allowedRoles.has(role)) {
         return asyncIteratorFn(args, context, info)
       }
     }
@@ -35,6 +35,6 @@ function withAuthorisation(
   }
 }
 
-module.exports = {
+export default {
   withAuthorisation
 }

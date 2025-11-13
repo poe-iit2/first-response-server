@@ -1,7 +1,3 @@
-const validateSessionSchema = `
+export const schema = `
   validateSession: User
-`
-
-module.exports = {
-  schema: validateSessionSchema
-}
+`;

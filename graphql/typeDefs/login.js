@@ -1,11 +1,7 @@
-const loginSchema = `
+export const schema = `
   type Login {
     token: String
     user: User
     expiresIn: String
   }
-`
-
-module.exports = {
-  schema: loginSchema
-}
+`;

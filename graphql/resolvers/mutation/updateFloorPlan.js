@@ -2,13 +2,14 @@
 // Work on adding floorInput too (updateFloorInput and createFloorInput)
 
 // Logic for connections and stuffs like that
-const { model, Types: { ObjectId } } = require("mongoose")
-const { nodeSchema } = require("../../../models/node")
+import mongoose from "mongoose"
+const { model, Types: { ObjectId } } = mongoose
+import { nodeSchema } from "../../../models/node"
 
-const NodeModel = model("Node", nodeSchema )
+const NodeModel = model("Node", nodeSchema)
 
-const { invisibleNodeSchema } = require("../../../models/invisibleNode")
-const InvisibleNodeModel = model("InvisibleNode", invisibleNodeSchema )
+import { invisibleNodeSchema } from "../../../models/invisibleNode"
+const InvisibleNodeModel = model("InvisibleNode", invisibleNodeSchema)
 
 // Keep checks in place to prevent duplicate invisible nodes from being created
 
@@ -21,46 +22,42 @@ connections{
 // Commenting for sanity
 // TODO: Use chatgpt later
 
-const FloorPlan = require("../floorPlan")
-const {
-  createLog,
-  formatModel,
-  updateLog
-} = require("../../../utils/createLog")
-const Floor = require("../floor")
+import { build } from "../floorPlan"
+import { createLog, formatModel, updateLog } from "../../../utils/createLog"
+import { build as _build } from "../floor"
 
-const { floorSchema } = require("../../../models/floor")
+import { floorSchema } from "../../../models/floor"
 const FloorModel = model("Floor", floorSchema)
 
 // Remember to change the function to updateFloor
 
 // Main function... it's downhill from here
-const updateFloorPlan = async ({
+export async function updateFloorPlan({
   createNodeInputs, // Check the schema to know what you're dealing with
   updateNodeInputs,
   id
-}, context) => {
+}, context) {
   // Auth check. Create a function wrapper sometime in the future for this
-  if(!context?.isAuth) throw new Error("Error creating Node. You are not authenticated.")
+  if (!context?.isAuth) throw new Error("Error creating Node. You are not authenticated.")
 
   // Array of Node resolvers to be returned
   // Mapping name of new nodes to the newly created nodes
   const nameMap = new Map()
   const deletedNodes = new Set()
   // Work on keeping this in functions since they are reused (updateNode e.t.c)
-  const currentFloor = await Floor.build(id, context)
+  const currentFloor = await _build(id, context)
   const floor = await FloorModel.findById(id)
   const currentBuilding = await currentFloor.building()
-  for(const {id, name, state, isExit, ui, isDeleted} of updateNodeInputs) {
+  for (const { id, name, state, isExit, ui, isDeleted } of updateNodeInputs) {
     const logs = [], updateLogs = []
-    if(isDeleted){
+    if (isDeleted) {
       const node = await NodeModel.findById(id)
       updateLog("node", node.id, node.name)
       createLog("NODE_DELETED", `Node ${node.name} on ${formatModel(currentFloor, "floor", "Floor")} has been deleted`,
-      {
-        floors: [currentFloor.id],
-        buildings: [currentBuilding.id]
-      })
+        {
+          floors: [currentFloor.id],
+          buildings: [currentBuilding.id]
+        })
       nameMap.set(node.name, node)
       deletedNodes.add(node.id)
       // Create a logic to update the node logs on delete and when the name's been updated
@@ -68,9 +65,9 @@ const updateFloorPlan = async ({
     }
     const node = await NodeModel.findById(id)
 
-    if(!node) throw new Error("Node not found")
+    if (!node) throw new Error("Node not found")
 
-    if(name?.length && name !== node.name) {
+    if (name?.length && name !== node.name) {
       const oldName = node.name
       node.name = name
       updateLogs.push(["node", node.id, oldName, node.name])
@@ -80,8 +77,8 @@ const updateFloorPlan = async ({
         nodes: [node.id]
       }])
     }
-    if(state?.length && state !== node.state){
-      switch(state){
+    if (state?.length && state !== node.state) {
+      switch (state) {
         case "safe":
           logs.push(["NODE_SAFE", `${formatModel(node, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")} is now safe`, {
             buildings: [currentBuilding.id],
@@ -114,7 +111,7 @@ const updateFloorPlan = async ({
       node.state = state
       // Keep different states for on fire, stuck and stuff like that
     }
-    if(typeof isExit === "boolean" && isExit != node.isExit){
+    if (typeof isExit === "boolean" && isExit != node.isExit) {
       logs.push(["NODE_EXIT", `${formatModel(node, "node", "Node")} has been assigned as an exit on ${formatModel(currentFloor, "floor", "Floor")}`, {
         buildings: [currentBuilding.id],
         floors: [currentFloor.id],
@@ -122,7 +119,7 @@ const updateFloorPlan = async ({
       }])
       node.isExit = isExit
     }
-    if(ui && (ui?.x !== node.ui.x || ui?.y !== node.ui.y)){
+    if (ui && (ui?.x !== node.ui.x || ui?.y !== node.ui.y)) {
       logs.push(["NODE_LOCATION_CHANGED", `${formatModel(node, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")} has been moved`, {
         buildings: [currentBuilding.id],
         floors: [currentFloor.id],
@@ -131,24 +128,24 @@ const updateFloorPlan = async ({
       node.ui = ui
     }
 
-    for(const [modelType, id, oldName, newName] of updateLogs)updateLog(modelType, id, oldName, newName)
+    for (const [modelType, id, oldName, newName] of updateLogs) updateLog(modelType, id, oldName, newName)
 
-    for(const [type, message, ids] of logs)createLog(type, message, ids)
+    for (const [type, message, ids] of logs) createLog(type, message, ids)
     nameMap.set(node.name, node)
   }
 
   // This guy creates the new nodes and adds them to the nodes array
-  for(const nodeInput of createNodeInputs) {
+  for (const nodeInput of createNodeInputs) {
     let node = await NodeModel.findOne({ name: nodeInput.name, floor: id })
 
-    if(node) throw new Error("Node already exists")
-    
-    const args = {name: nodeInput.name, floor: id, connections: []}
+    if (node) throw new Error("Node already exists")
 
-    if(nodeInput.state) args.state = nodeInput.state
-    if(nodeInput.isExit) args.isExit = nodeInput.isExit
+    const args = { name: nodeInput.name, floor: id, connections: [] }
+
+    if (nodeInput.state) args.state = nodeInput.state
+    if (nodeInput.isExit) args.isExit = nodeInput.isExit
     else args.isExit = false
-    if(nodeInput.ui) args.ui = nodeInput.ui
+    if (nodeInput.ui) args.ui = nodeInput.ui
 
     node = new NodeModel(args)
 
@@ -157,37 +154,37 @@ const updateFloorPlan = async ({
       floors: [currentFloor.id],
       nodes: [node.id]
     })
-  
+
     nameMap.set(node.name, node)
   }
 
   const handleConnections = (name, connections) => {
     const node = nameMap.get(name)
-    if(!node)return
-    for(const connection of connections) {
+    if (!node) return
+    for (const connection of connections) {
       // No need to do for both xy and yx
-      if(connection.direction === "yx")continue
+      if (connection.direction === "yx") continue
       const otherNode = nameMap.get(connection.name)
-      if(!otherNode) continue
+      if (!otherNode) continue
       console.log("node Connections", node.connections)
       console.log(node.id, otherNode.id)
       const oldConnection = node.connections.find(connection => connection.id.toString() === otherNode.id)
       console.log("oldConnection", oldConnection)
-      if(oldConnection && oldConnection.direction === connection.direction){
+      if (oldConnection && oldConnection.direction === connection.direction) {
         continue
-      }else{
+      } else {
         node.connections = node.connections.filter(connection => connection.id.toString() !== otherNode.id.toString())
         otherNode.connections = otherNode.connections.filter(connection => connection.id.toString() !== node.id.toString())
-        if(connection.direction === "") {
+        if (connection.direction === "") {
           // If the connection existed to begin with, log the disconnection
-          if(oldConnection){
+          if (oldConnection) {
             createLog("NODES_DISCONNECTED", `${formatModel(node, "node", "Node")} has been disconnected from ${formatModel(node, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")}`, {
               buildings: [currentBuilding.id],
               floors: [currentFloor.id],
               nodes: [node.id, otherNode.id]
             })
           }
-        }else{
+        } else {
           node.connections.push({
             id: otherNode.id,
             direction: connection.direction
@@ -196,7 +193,7 @@ const updateFloorPlan = async ({
             id: node.id,
             direction: connection.direction === "xy" ? "yx" : "xy"
           })
-          if(!oldConnection){
+          if (!oldConnection) {
             createLog("NODES_CONNECTED", `${formatModel(node, "node", "Node")} has been connected to ${formatModel(otherNode, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")}`, {
               buildings: [currentBuilding.id],
               floors: [currentFloor.id],
@@ -208,16 +205,16 @@ const updateFloorPlan = async ({
     }
   }
 
-  for(const { name, connections } of updateNodeInputs) {
+  for (const { name, connections } of updateNodeInputs) {
     handleConnections(name, connections)
   }
 
-  for(const { name, connections } of createNodeInputs) {
+  for (const { name, connections } of createNodeInputs) {
     handleConnections(name, connections)
   }
 
-  for(const [_, node] of nameMap) {
-    if(deletedNodes.has(node.id)){
+  for (const [_, node] of nameMap) {
+    if (deletedNodes.has(node.id)) {
       await NodeModel.findOneAndDelete({ _id: node._id })
       floor.nodes = floor.nodes.filter(node => node._id.toString() !== node.id.toString())
       continue
@@ -232,7 +229,7 @@ const updateFloorPlan = async ({
   // Update the nodes to reflect that they are connected to the invisible node
   // Also figure out a way to make sure connections has only two nodes, using an array is lazy and sloppy
   // create functions for repeated logic to make code less lengthy
-  
+
   // for(const invisibleNodeInput of updateInvisibleNodeInputs) {
   //   if(invisibleNodeInput.isDeleted){
   //     let invisibleNode = await InvisibleNodeModel.findOneAndDelete({
@@ -250,7 +247,7 @@ const updateFloorPlan = async ({
   //   const invisibleNode = await InvisibleNodeModel.findById(invisibleNodeInput.id)
 
   //   if(!invisibleNode) throw new Error("Invisible Node not found")
-    
+
 
   //   if("connections" in invisibleNodeInput){
   //     const connections = invisibleNodeInput.connections
@@ -288,7 +285,7 @@ const updateFloorPlan = async ({
 
   // for(const invisibleNodeInput of createInvisibleNodeInputs) {
   //   const invisibleNode = new InvisibleNodeModel({})
-    
+
   //   const connections = invisibleNodeInput.connections
 
   //   if(connections?.length !== 2){
@@ -329,15 +326,7 @@ const updateFloorPlan = async ({
 
   // }
 
-  const floorPlan = await FloorPlan.build(id, context)
+  const floorPlan = await build(id, context)
 
   return floorPlan
-}
-
-// Create a database for invisible nodes
-// Every new node comes with it's own set of invisible nodes
-// Let's assume every
-
-module.exports = {
-  updateFloorPlan
 }

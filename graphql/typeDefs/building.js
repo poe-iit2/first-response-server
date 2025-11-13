@@ -1,4 +1,4 @@
-const buildingSchema = `
+export const schema = `
   type Building {
     id: ID!
     name: String!
@@ -6,8 +6,4 @@ const buildingSchema = `
     createdAt: String!
     updatedAt: String!
   }
-`
-
-module.exports = {
-  schema: buildingSchema
-}
+`;

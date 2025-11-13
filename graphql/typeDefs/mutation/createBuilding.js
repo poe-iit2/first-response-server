@@ -1,7 +1,3 @@
-const createBuildingSchema = `
+export const schema = `
   createBuilding(createBuildingInput: CreateBuildingInput!): Building
 `
-
-module.exports = {
-  schema: createBuildingSchema
-}

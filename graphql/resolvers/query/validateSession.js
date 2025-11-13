@@ -1,12 +1,8 @@
-const User = require("../user")
+import { build } from "../user"
 
-const validateSession = async ({}, context) => {
-  if(!context?.isAuth) throw new Error("Error validating session. You are not authenticated.")
-  
-  const user = await User.build(context.user.userId, context)
+export async function validateSession({ }, context) {
+  if (!context?.isAuth) throw new Error("Error validating session. You are not authenticated.")
+
+  const user = await build(context.user.userId, context)
   return user
-}
-
-module.exports = {
-  validateSession
 }

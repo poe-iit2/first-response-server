@@ -1,12 +1,12 @@
-const { model } = require("mongoose")
-const { invisibleNodeSchema } = require("../../models/invisibleNode")
+import { model } from "mongoose"
+import { invisibleNodeSchema } from "../../models/invisibleNode"
 
 const InvisibleNodeModel = model("InvisibleNode", invisibleNodeSchema)
 
 // Define a 'Floor' class to encapsulate floor-related operations and data
-class InvisibleNode {
+export default class InvisibleNode {
   static async build(invisibleNodeId, context) {
-    if(!context?.isAuth) throw new Error("Error retrieving data. You are not authenticated.")
+    if (!context?.isAuth) throw new Error("Error retrieving data. You are not authenticated.")
     const invisibleNode = await InvisibleNodeModel.findById(invisibleNodeId)
 
     if (!invisibleNode) {
@@ -16,7 +16,7 @@ class InvisibleNode {
   }
 
   constructor(invisibleNode, context) {
-    if(!context?.isAuth) throw new Error("Error retrieving Floor data. You are not authenticated.")
+    if (!context?.isAuth) throw new Error("Error retrieving Floor data. You are not authenticated.")
     this.context = context
     this.invisibleNode = invisibleNode
 
@@ -29,7 +29,7 @@ class InvisibleNode {
     this.updatedAt = invisibleNode.updatedAt
   }
   async connectedNodes() {
-    const Node = require("./node")
+    const Node = require("./node").default
     const connections = []
     const firstNode = await Node.build(this.invisibleNode.connectedNodes[0], this.context)
     const secondNode = await Node.build(this.invisibleNode.connectedNodes[1], this.context)
@@ -41,5 +41,3 @@ class InvisibleNode {
     return connections
   }
 }
-
-module.exports = InvisibleNode

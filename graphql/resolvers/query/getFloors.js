@@ -1,13 +1,13 @@
-const { model } = require("mongoose")
-const { floorSchema } = require("../../../models/floor")
+import { model } from "mongoose"
+import { floorSchema } from "../../../models/floor"
 
 const FloorModel = model("Floor", floorSchema)
 
-const Floor = require("../floor")
+import Floor from "../floor"
 
 // Define an asynchronous function to fetch all floors
-const getFloors = async (_, context) => {
-  if(!context?.isAuth) throw new Error("Error retrieving Floor data. You are not authenticated.")
+export async function getFloors(_, context) {
+  if (!context?.isAuth) throw new Error("Error retrieving Floor data. You are not authenticated.")
   const floors = await FloorModel.find() || []
 
   const response = []
@@ -16,6 +16,3 @@ const getFloors = async (_, context) => {
   }
   return response
 }
-
-// Export the 'getFloors' function to make it accessible from other modules
-module.exports = { getFloors }

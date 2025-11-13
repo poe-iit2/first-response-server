@@ -1,7 +1,3 @@
-const logoutUserSchema = `
+export const schema = `
   logoutUser: Status
-`
-
-module.exports = {
-  schema: logoutUserSchema
-}
+`;

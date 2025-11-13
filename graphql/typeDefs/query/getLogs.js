@@ -1,7 +1,3 @@
-const getLogsSchema = `
+export const schema = `
   getLogs(logInput: LogInput): LogOutput
-`
-
-module.exports = {
-  schema: getLogsSchema
-}
+`;

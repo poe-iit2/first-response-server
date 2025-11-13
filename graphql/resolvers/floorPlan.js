@@ -1,13 +1,13 @@
 // By default, invisible node has no reason to be returned, but for editing it's useful
-const { model } = require("mongoose")
-const { floorSchema } = require("../../models/floor")
-const FloorModel = model("Floor", floorSchema )
+import { model } from "mongoose"
+import { floorSchema } from "../../models/floor"
+const FloorModel = model("Floor", floorSchema)
 
-const Floor = require("./floor")
+import Floor from "./floor"
 
-class FloorPlan extends Floor {
+export default class FloorPlan extends Floor {
   static async build(floorId, context) {
-    if(!context?.isAuth) throw new Error("Error retrieving data. You are not authenticated.")
+    if (!context?.isAuth) throw new Error("Error retrieving data. You are not authenticated.")
     const floor = await FloorModel.findById(floorId).exec()
 
     if (!floor) {
@@ -20,5 +20,3 @@ class FloorPlan extends Floor {
     super(floor, context)
   }
 }
-
-module.exports = FloorPlan

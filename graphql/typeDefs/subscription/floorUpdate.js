@@ -1,7 +1,3 @@
-const floorUpdateSchema = `
+export const schema = `
   floorUpdate(id: ID!): Floor
-`
-
-module.exports = {
-  schema: floorUpdateSchema
-}
+`;

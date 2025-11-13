@@ -1,5 +1,6 @@
 // Destructure Schema from Mongoose to define a schema for a MongoDB collection
-const { Schema, Types: { ObjectId} } = require("mongoose")
+import mongoose from "mongoose"
+const { Schema, Types: { ObjectId } } = mongoose
 
 // Define a schema for a "Log" collection
 const logSchema = new Schema({
@@ -31,6 +32,6 @@ const logSchema = new Schema({
 })
 
 // Export the log schema as part of an object
-module.exports = {
+export default {
   logSchema
 }

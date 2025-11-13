@@ -1,34 +1,34 @@
 // Mutations
-const { createBuilding } = require("./mutation/createBuilding")
-const { createFloor } = require("./mutation/createFloor")
-const { updateFloorPlan } = require("./mutation/updateFloorPlan")
-const { createUser } = require("./mutation/createUser")
-const { updateBuilding } = require("./mutation/updateBuilding")
-const { updateFloor } = require("./mutation/updateFloor")
-const { updateNode } = require("./mutation/updateNode")
+import { createBuilding } from "./mutation/createBuilding"
+import { createFloor } from "./mutation/createFloor"
+import { updateFloorPlan } from "./mutation/updateFloorPlan"
+import { createUser } from "./mutation/createUser"
+import { updateBuilding } from "./mutation/updateBuilding"
+import { updateFloor } from "./mutation/updateFloor"
+import { updateNode } from "./mutation/updateNode"
 
 // Queries
-const { deleteImage } = require("./query/deleteImage")
-const { generateSignature } = require("./query/generateSignature")
-const { getBuilding } = require("./query/getBuilding")
-const { getBuildings } = require("./query/getBuildings")
-const { getFloor } = require("./query/getFloor")
-const { getFloorPlan } = require("./query/getFloorPlan")
-const { getFloors } = require("./query/getFloors")
-const { getLogs } = require("./query/getLogs")
-const { loginUser } = require("./query/loginUser")
-const { logoutUser } = require("./query/logoutUser")
-const { validateSession } = require("./query/validateSession")
+import { deleteImage } from "./query/deleteImage"
+import { generateSignature } from "./query/generateSignature"
+import { getBuilding } from "./query/getBuilding"
+import { getBuildings } from "./query/getBuildings"
+import { getFloor } from "./query/getFloor"
+import { getFloorPlan } from "./query/getFloorPlan"
+import { getFloors } from "./query/getFloors"
+import { getLogs } from "./query/getLogs"
+import { loginUser } from "./query/loginUser"
+import { logoutUser } from "./query/logoutUser"
+import { validateSession } from "./query/validateSession"
 
 // Subscriptions
-const { buildingUpdate } = require("./subscription/buildingUpdate")
-const { buildingUpdates } = require("./subscription/buildingUpdates")
-const { floorUpdate } = require("./subscription/floorUpdate")
-const { nodeUpdate } = require("./subscription/nodeUpdate")
-const { sendHello } = require("./subscription/sendHello")
+import { buildingUpdate } from "./subscription/buildingUpdate"
+import { buildingUpdates } from "./subscription/buildingUpdates"
+import { floorUpdate } from "./subscription/floorUpdate"
+import { nodeUpdate } from "./subscription/nodeUpdate"
+import { sendHello } from "./subscription/sendHello"
 
 // Resolver
-const resolvers = {
+export default {
   createBuilding,
   createFloor,
   createUser,
@@ -54,8 +54,4 @@ const resolvers = {
     nodeUpdate,
     sendHello
   }
-}
-
-module.exports = {
-  resolvers
 }

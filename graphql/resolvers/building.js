@@ -1,13 +1,13 @@
-const { model } = require("mongoose")
-const { buildingSchema } = require("../../models/building")
-const BuildingModel = model("Building", buildingSchema )
+import { model } from "mongoose"
+import { buildingSchema } from "../../models/building"
+const BuildingModel = model("Building", buildingSchema)
 
 // Define a 'Building' class to encapsulate building-related operations and data
 
 // Create a class that is inherited by all this classes so you don't have to worry about keeping the auth check everytime
-class Building {
+export default class Building {
   static async build(buildingId, context) {
-    if(!context?.isAuth) throw new Error("Error retrieving Building data. You are not authenticated.")
+    if (!context?.isAuth) throw new Error("Error retrieving Building data. You are not authenticated.")
     const building = await BuildingModel.findById(buildingId).exec()
 
     if (!building) {
@@ -17,7 +17,7 @@ class Building {
   }
 
   constructor(building, context) {
-    if(!context?.isAuth) throw new Error("Error retrieving data. You are not authenticated.")
+    if (!context?.isAuth) throw new Error("Error retrieving data. You are not authenticated.")
     this.context = context
     this.building = building
 
@@ -29,16 +29,13 @@ class Building {
 
 
   async floors() {
-    const Floor = require("./floor")
+    const Floor = require("./floor").default
     const floors = this.building.floors || []
 
     const response = []
-    for(const floor of floors) {
+    for (const floor of floors) {
       response.push(await Floor.build(floor._id, this.context))
     }
     return response
   }
 }
-
-// Export the Building class for use in other parts of the application
-module.exports = Building

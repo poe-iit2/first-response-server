@@ -1,7 +1,3 @@
-const sendHelloSchema = `
+export const schema = `
   sendHello: Hello
-`
-
-module.exports = {
-  schema: sendHelloSchema
-}
+`;

@@ -1,4 +1,4 @@
-const floorPlanSchema = `
+export const schema = `
   type FloorPlan {
     id: ID!
     name: String!
@@ -8,8 +8,4 @@ const floorPlanSchema = `
     createdAt: String!
     updatedAt: String!
   }
-`
-
-module.exports = {
-  schema: floorPlanSchema
-}
+`;

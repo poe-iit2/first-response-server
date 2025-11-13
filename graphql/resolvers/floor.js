@@ -1,12 +1,12 @@
-const { model } = require("mongoose")
-const { floorSchema } = require("../../models/floor")
+import { model } from "mongoose"
+import { floorSchema } from "../../models/floor"
 
 const FloorModel = model("Floor", floorSchema)
 
 // Define a 'Floor' class to encapsulate floor-related operations and data
-class Floor {
+export default class Floor {
   static async build(floorId, context) {
-    if(!context?.isAuth) throw new Error("Error retrieving data. You are not authenticated.")
+    if (!context?.isAuth) throw new Error("Error retrieving data. You are not authenticated.")
     const floor = await FloorModel.findById(floorId).exec()
 
     if (!floor) {
@@ -16,7 +16,7 @@ class Floor {
   }
 
   constructor(floor, context) {
-    if(!context?.isAuth) throw new Error("Error retrieving Floor data. You are not authenticated.")
+    if (!context?.isAuth) throw new Error("Error retrieving Floor data. You are not authenticated.")
     this.context = context
     this.floor = floor
 
@@ -41,26 +41,23 @@ class Floor {
   }
 
   async building() {
-    const Building = require("./building")
+    const Building = require("./building").default
     const buildingId = this.floor.building
     const building = await Building.build(buildingId, this.context)
     return building
   }
 
   async nodes() {
-    const Node = require("./node")
+    const Node = require("./node").default
     const nodes = []
-    for(const nodeId of this.floor.nodes) {
-      try{
+    for (const nodeId of this.floor.nodes) {
+      try {
         const node = await Node.build(nodeId, this.context)
         nodes.push(node)
-      } catch(e) {
+      } catch (e) {
         continue
       }
     }
     return nodes
   }
 }
-
-// Export the Floor class for use in other parts of the application
-module.exports = Floor

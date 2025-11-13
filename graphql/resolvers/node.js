@@ -1,14 +1,14 @@
-const { model } = require("mongoose")
-const { nodeSchema } = require("../../models/node")
-const Floor = require("./floor")
+import { model } from "mongoose"
+import { nodeSchema } from "../../models/node"
+import Floor from "./floor"
 
 const NodeModel = model("Node", nodeSchema)
 
 // Define a 'Node' class to encapsulate node-related operations and data
-class Node {
+export default class Node {
 
   static async build(nodeId, context) {
-    if(!context?.isAuth) throw new Error("Error retrieving Node data. You are not authenticated.")
+    if (!context?.isAuth) throw new Error("Error retrieving Node data. You are not authenticated.")
 
     const node = await NodeModel.findById(nodeId).exec()
     if (!node) {
@@ -19,7 +19,7 @@ class Node {
   }
 
   constructor(node, context) {
-    if(!context?.isAuth) throw new Error("Error retrieving Node data. You are not authenticated.")
+    if (!context?.isAuth) throw new Error("Error retrieving Node data. You are not authenticated.")
     this.context = context
     this.node = node
     this.id = node.id || ""
@@ -35,10 +35,10 @@ class Node {
     const connections = []
 
     const invisibleNodes = this.node.connections
-    for(const invisibleNode of invisibleNodes) {
+    for (const invisibleNode of invisibleNodes) {
       try {
         const node = await NodeModel.findById(invisibleNode.id)
-        if(!node) continue
+        if (!node) continue
         connections.push(new Node(node, this.context))
         connections.at(-1).direction = invisibleNode.direction
       } catch (error) {
@@ -56,6 +56,3 @@ class Node {
     return floor
   }
 }
-
-// Export the Node class for use in other parts of the application
-module.exports = Node

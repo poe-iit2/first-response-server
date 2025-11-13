@@ -1,12 +1,8 @@
-const floorImageInputSchema = `
+export const schema = `
   input FloorImageInput {
     name: String
     url: String
     position: [Float]
     scale: [Float]
   }
-`
-
-module.exports = {
-  schema: floorImageInputSchema
-}
+`;

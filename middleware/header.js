@@ -1,8 +1,6 @@
-const addHeaders = require("../utils/addHeaders")
+import addHeaders from "../utils/addHeaders"
 
-const headerMiddleWare = (req, res, next) => {
+export default function headerMiddleWare(req, res, next) {
   addHeaders(req, res)
   next()
 }
-
-module.exports = headerMiddleWare

@@ -1,4 +1,4 @@
-const logSchema = `
+export const schema = `
   type Log {
     id: String!
     type: String!
@@ -10,8 +10,4 @@ const logSchema = `
     updatedAt: String!
     createdAt: String!
   }
-`
-
-module.exports = {
-  schema: logSchema
-}
+`;

@@ -1,7 +1,3 @@
-const generateSignatureSchema = `
+export const schema = `
   generateSignature(id: ID!): Signature!
-`
-
-module.exports = {
-  schema: generateSignatureSchema
-}
+`;

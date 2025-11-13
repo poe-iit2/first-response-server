@@ -1,4 +1,4 @@
-const userSchema = `
+export const schema = `
   type User {
     id: ID!
     username: String
@@ -9,8 +9,4 @@ const userSchema = `
     updatedAt: String!
     accountStatus: String!
   }
-`
-
-module.exports = {
-  schema: userSchema
-}
+`;

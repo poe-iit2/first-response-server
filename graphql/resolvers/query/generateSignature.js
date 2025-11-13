@@ -1,11 +1,11 @@
-const crypto = require("crypto");
-const Signature = require("../signature");
+import { createHash } from "crypto";
+import Signature from "../signature";
 
 // Define an asynchronous function to generate a cryptographic signature based on the provided 'id'
 // The function expects an object with an 'id' property
-const generateSignature = async ({ id }, context) => {
+export async function generateSignature({ id }, context) {
   // Create a wrapper of some sort so you don't have to do this on every query
-  if(!context?.isAuth) throw new Error("Error generating Signature. You are not authenticated.")
+  if (!context?.isAuth) throw new Error("Error generating Signature. You are not authenticated.")
   const timestamp = Math.round((new Date()).getTime() / 1000)
 
   const params_to_sign = {
@@ -19,13 +19,9 @@ const generateSignature = async ({ id }, context) => {
     .join("&");
 
   // Using SHA-256 for hashing instead of SHA-1
-  const signature = crypto.createHash("sha256").update(param_string + process.env.CLOUDINARY_SECRET).digest("hex");
+  const signature = createHash("sha256").update(param_string + process.env.CLOUDINARY_SECRET).digest("hex");
 
 
-  const response = new Signature({signature, timeStamp: timestamp}, context)
+  const response = new Signature({ signature, timeStamp: timestamp }, context)
   return response;
 };
-
-
-// Export the 'generateSignature' function to make it accessible from other modules
-module.exports = { generateSignature };

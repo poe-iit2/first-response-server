@@ -1,54 +1,54 @@
-const { buildSchema } = require("graphql");
+import { buildSchema } from "graphql";
 
-const createBuilding = require("./mutation/createBuilding")
-const createFloor = require("./mutation/createFloor")
-const createUser = require("./mutation/createUser")
-const updateBuilding = require("./mutation/updateBuilding")
-const updateFloor = require("./mutation/updateFloor")
-const updateFloorPlan = require("./mutation/updateFloorPlan")
-const updateNode = require("./mutation/updateNode")
+import * as createBuilding from "./mutation/createBuilding";
+import * as createFloor from "./mutation/createFloor";
+import * as createUser from "./mutation/createUser";
+import * as updateBuilding from "./mutation/updateBuilding";
+import * as updateFloor from "./mutation/updateFloor";
+import * as updateFloorPlan from "./mutation/updateFloorPlan";
+import * as updateNode from "./mutation/updateNode";
 
-const deleteImage = require("./query/deleteImage")
-const generateSignature = require("./query/generateSignature");
-const getBuilding = require("./query/getBuilding")
-const getBuildings = require("./query/getBuildings")
-const getFloor = require("./query/getFloor")
-const getFloorPlan = require("./query/getFloorPlan")
-const getFloors = require("./query/getFloors")
-const getLogs = require("./query/getLogs")
-const loginUser = require("./query/loginUser")
-const logoutUser = require("./query/logoutUser")
-const validateSession = require("./query/validateSession")
+import * as deleteImage from "./query/deleteImage";
+import * as generateSignature from "./query/generateSignature";
+import * as getBuilding from "./query/getBuilding";
+import * as getBuildings from "./query/getBuildings";
+import * as getFloor from "./query/getFloor";
+import * as getFloorPlan from "./query/getFloorPlan";
+import * as getFloors from "./query/getFloors";
+import * as getLogs from "./query/getLogs";
+import * as loginUser from "./query/loginUser";
+import * as logoutUser from "./query/logoutUser";
+import * as validateSession from "./query/validateSession";
 
-const buildingUpdate = require("./subscription/buildingUpdate")
-const buildingUpdates = require("./subscription/buildingUpdates")
-const floorUpdate = require("./subscription/floorUpdate")
-const nodeUpdate = require("./subscription/nodeUpdate")
-const sendHello = require("./subscription/sendHello")
+import * as buildingUpdate from "./subscription/buildingUpdate";
+import * as buildingUpdates from "./subscription/buildingUpdates";
+import * as floorUpdate from "./subscription/floorUpdate";
+import * as nodeUpdate from "./subscription/nodeUpdate";
+import * as sendHello from "./subscription/sendHello";
 
-const building = require("./building")
-const floor = require("./floor")
-const floorPlan = require("./floorPlan")
-const floorImage = require("./floorImage")
-const hello = require("./hello")
-const invisibleNode = require("./invisibleNode")
-const log = require("./log")
-const login = require("./login")
-const logOutput = require("./logOutput")
-const node = require("./node")
-const nodeUI = require("./nodeUI")
-const signature = require("./signature")
-const status = require("./status")
-const user = require("./user")
+import * as building from "./building";
+import * as floor from "./floor";
+import * as floorPlan from "./floorPlan";
+import * as floorImage from "./floorImage";
+import * as hello from "./hello";
+import * as invisibleNode from "./invisibleNode";
+import * as log from "./log";
+import * as login from "./login";
+import * as logOutput from "./logOutput";
+import * as node from "./node";
+import * as nodeUI from "./nodeUI";
+import * as signature from "./signature";
+import * as status from "./status";
+import * as user from "./user";
 
-const buildingInput = require("./buildingInput")
-const floorImageInput = require("./floorImageInput")
-const floorInput = require("./floorInput")
-const nodeInput = require("./nodeInput")
-const nodeUIInput = require("./nodeUIInput");
-const logInput = require("./logInput");
+import { createBuildingInput, updateBuildingInput } from "./buildingInput";
+import * as floorImageInput from "./floorImageInput";
+import { createFloorInput, updateFloorInput } from "./floorInput";
+import { createNodeInput, nodeReferenceInput, updateNodeInput } from "./nodeInput";
+import * as nodeUIInput from "./nodeUIInput";
+import * as logInput from "./logInput";
 
-const schema = buildSchema(`
+export const schema = buildSchema(`
   type Mutation {
     ${createBuilding.schema}
     ${createFloor.schema}
@@ -107,7 +107,3 @@ const schema = buildSchema(`
   ${status.schema}
   ${user.schema}
 `)
-
-module.exports = {
-  schema
-}

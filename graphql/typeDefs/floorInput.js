@@ -1,4 +1,5 @@
-const createFloorInputSchema = `
+export const createFloorInput = {
+  schema: `
   input CreateFloorInput {
     id: ID
     name: String!
@@ -8,8 +9,9 @@ const createFloorInputSchema = `
     nodes: [UpdateNodeInput]
   }
 `
-
-const updateFloorInputSchema = `
+};
+export const updateFloorInput = {
+  schema: `
   input UpdateFloorInput {
     id: ID!
     name: String
@@ -18,12 +20,4 @@ const updateFloorInputSchema = `
     isDeleted: Boolean
   }
 `
-
-module.exports = {
-  createFloorInput: {
-    schema: createFloorInputSchema
-  },
-  updateFloorInput: {
-    schema: updateFloorInputSchema
-  }
-}
+};

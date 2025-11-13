@@ -1,12 +1,18 @@
 // Destructure Schema from Mongoose to define a schema for a MongoDB collection
-const { model,Schema } = require("mongoose")
+import { model, Schema } from "mongoose"
 
-const deleteImage = require("../utils/deleteImage")
+import deleteImage from "../utils/deleteImage"
 
 // Destructure ObjectId type from Mongoose to use it as a reference type in the schema
-const { ObjectId } = require("mongoose").Types
+import { Types } from "mongoose"
+const { ObjectId } = Types
 
-const pubsub = require("../utils/pubsub")
+import pubsub from "../utils/pubsub"
+
+import * as Floor from "../graphql/resolvers/floor"
+import { logSchema } from "./log"
+import { nodeSchema } from "./node"
+import { buildingSchema } from "./building"
 
 // Define a schema for a "Floor" collection
 const floorSchema = new Schema({
@@ -38,7 +44,7 @@ const floorSchema = new Schema({
       type: [Number],
       default: [0, 0],
     },
-    scale:{
+    scale: {
       type: [Number],
       default: [1, 1],
     }
@@ -51,24 +57,22 @@ const floorSchema = new Schema({
 
 floorSchema.post("save", async (doc) => {
   // Import the Floor resolver to handle fetching floor data
-  const Floor = require("../graphql/resolvers/floor")
   pubsub.publish("FLOOR_UPDATE", {
     floorUpdate: Floor.build(doc.id, {
       isAuth: true
     })
   })
-  const { buildingSchema } = require("./building")
-  const BuildingModel = model("Building", buildingSchema )
+  const BuildingModel = model("Building", buildingSchema)
 
   const buildingId = doc.building
 
   const building = await BuildingModel.findById(buildingId.toString())
-  if(!building) throw new Error("Building not found")
+  if (!building) throw new Error("Building not found")
 
   building.floors = building.floors || []
   // Work on getting the position of the id and then adding it back at the same
   // position
-  if(!building.floors.find(floor => floor._id.toString() === doc._id.toString())){
+  if (!building.floors.find(floor => floor._id.toString() === doc._id.toString())) {
     building.floors.push(doc._id)
   }
 
@@ -76,21 +80,18 @@ floorSchema.post("save", async (doc) => {
 })
 
 floorSchema.post("findOneAndDelete", async (doc) => {
-  const { logSchema } = require("./log")
-  const { nodeSchema } = require("./node")
-  const { buildingSchema } = require("./building")
   const LogModel = model("Log", logSchema)
   const NodeModel = model("Node", nodeSchema)
   const BuildingModel = model("Building", buildingSchema)
 
   const publicId = doc?.image?.url?.split('/').pop().split('.')[0]
-  if(publicId?.length)deleteImage(publicId)
+  if (publicId?.length) deleteImage(publicId)
 
   const logs = await LogModel.find({
-    floors: { $in: [doc.id]}
+    floors: { $in: [doc.id] }
   })
 
-  for(const log of logs){
+  for (const log of logs) {
     const regex = new RegExp(`\\(([^\\)]*)(${doc.name})([^\\)]*)\\)\\[floor\\]\\[${doc.id}\\]`, 'g')
 
     log.message = log.message.replace(regex, (match, prefix, oldName, suffix) => {
@@ -104,15 +105,15 @@ floorSchema.post("findOneAndDelete", async (doc) => {
 
   const nodes = doc.nodes
 
-  for(const node of nodes){
-    await NodeModel.findOneAndDelete({ 
+  for (const node of nodes) {
+    await NodeModel.findOneAndDelete({
       _id: node._id
     })
   }
 
   const building = await BuildingModel.findById(doc.building)
 
-  if(building){
+  if (building) {
     building.floors = building.floors.filter(floorId => floorId._id.toString() !== doc._id.toString())
 
     await building.save()
@@ -120,6 +121,6 @@ floorSchema.post("findOneAndDelete", async (doc) => {
 })
 
 // Export the floor schema as part of an object
-module.exports = {
+export default {
   floorSchema
 }

@@ -1,6 +1,6 @@
-const { model } = require("mongoose")
+import { model } from "mongoose"
 
-const { logSchema } = require("../models/log")
+import { logSchema } from "../models/log"
 const LogModel = model("Log", logSchema)
 
 const createLog = (type, message, ids = {}) => {
@@ -16,12 +16,12 @@ const createLog = (type, message, ids = {}) => {
 }
 
 const formatModel = (initModel, modelType, prefix, suffix) => {
-  return `(${prefix || ""}${prefix?.length ? " " : ""}${initModel.name}${suffix?.length ? " " : ""}${suffix|| ""})[${modelType}][${initModel.id}]`
+  return `(${prefix || ""}${prefix?.length ? " " : ""}${initModel.name}${suffix?.length ? " " : ""}${suffix || ""})[${modelType}][${initModel.id}]`
 }
 
-const updateLog = async (modelType, id, oldName, newName) => {
+async function updateLog(modelType, id, oldName, newName) {
   const query = {}
-  switch(modelType){
+  switch (modelType) {
     case "building":
       query["buildings"] = { $in: [id] }
       break
@@ -38,9 +38,9 @@ const updateLog = async (modelType, id, oldName, newName) => {
   const logs = await LogModel.find(query)
 
   const regex = new RegExp(`\\(([^\\)]*)(${oldName})([^\\)]*)\\)\\[${modelType}\\]\\[${id}\\]`, 'g');
-  for(const log of logs) {
+  for (const log of logs) {
     log.message = log.message.replace(regex, (match, prefix, oldName, suffix) => {
-      if(newName?.length){
+      if (newName?.length) {
         return `(${prefix}${newName}${suffix})[${modelType}][${id}]`
       }
       return `${prefix}${oldName}${suffix}`
@@ -74,7 +74,7 @@ const priorities = {
   BUILDING_NAME_CHANGE: 2
 }
 
-module.exports = {
+export default {
   createLog,
   formatModel,
   updateLog

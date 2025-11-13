@@ -1,8 +1,8 @@
 // Don't change
 
-const { $$asyncIterator } = require("iterall")
+import { $$asyncIterator } from "iterall";
 
-function withFilter(
+export function withFilter(
   asyncIteratorFn,
   filterFn
 ) {
@@ -61,7 +61,3 @@ function withFilter(
     return asyncIterator2;
   };
 };
-
-module.exports = {
-  withFilter
-}

@@ -1,27 +1,24 @@
-const { model, Types: { ObjectId} } = require("mongoose")
-const { nodeSchema } = require("../../../models/node")
-const NodeModel = model("Node", nodeSchema )
+import mongoose from "mongoose"
+const { model, Types: { ObjectId } } = mongoose
+import { nodeSchema } from "../../../models/node"
+const NodeModel = model("Node", nodeSchema)
 
-const Node = require("../node")
-const Floor = require("../floor")
+import Node from "../node"
+import { build } from "../floor"
 
-const {
-  createLog,
-  formatModel,
-  updateLog
-} = require("../../../utils/createLog")
+import { createLog, formatModel, updateLog } from "../../../utils/createLog"
 
 // Work on adding the invisibleNodes logic to the node update
-const updateNode = async ({
+export async function updateNode({
   updateNodeInput: { id, name, state, isExit, ui, isDeleted }
-}, context) => {
-  if(!context?.isAuth) throw new Error("Error updating Node. You are not authenticated.")
-  try{
-    if(isDeleted){
+}, context) {
+  if (!context?.isAuth) throw new Error("Error updating Node. You are not authenticated.")
+  try {
+    if (isDeleted) {
       const node = await NodeModel.findOneAndDelete({
         _id: new ObjectId(`${id}`)
       })
-      const currentFloor = await Floor.build(node.floor, context)
+      const currentFloor = await build(node.floor, context)
       const currentBuilding = await currentFloor.building()
       updateLog("node", node.id, node.name)
       createLog("NODE_DELETED", `Node ${node.name} on ${formatModel(currentFloor, "floor", "Floor")} has been deleted`, {
@@ -31,16 +28,16 @@ const updateNode = async ({
       return null
     }
 
-    if(!node){
+    if (!node) {
       throw new Error("Node not found")
     }
 
     const node = await NodeModel.findById(id)
-    const currentFloor = await Floor.build(node.floor, context)
+    const currentFloor = await build(node.floor, context)
     const currentBuilding = await currentFloor.building()
     const logs = [], updateLogs = []
 
-    if(name?.length && name !== node.name) {
+    if (name?.length && name !== node.name) {
       const oldName = node.name
       node.name = name
       updateLogs.push(["node", node.id, oldName, node.name])
@@ -50,8 +47,8 @@ const updateNode = async ({
         nodes: [node.id]
       }])
     }
-    if(state?.length && state !== node.state){
-      switch(state){
+    if (state?.length && state !== node.state) {
+      switch (state) {
         case "safe":
           logs.push(["NODE_SAFE", `${formatModel(node, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")} is now safe`, {
             buildings: [currentBuilding.id],
@@ -84,7 +81,7 @@ const updateNode = async ({
       node.state = state
       // Keep different states for on fire, stuck and stuff like that
     }
-    if(typeof isExit === "boolean" && isExit != node.isExit){
+    if (typeof isExit === "boolean" && isExit != node.isExit) {
       logs.push(["NODE_EXIT", `${formatModel(node, "node", "Node")} has been assigned as an exit on ${formatModel(currentFloor, "floor", "Floor")}`, {
         buildings: [currentBuilding.id],
         floors: [currentFloor.id],
@@ -92,7 +89,7 @@ const updateNode = async ({
       }])
       node.isExit = isExit
     }
-    if(ui && (ui?.x !== node.ui.x || ui?.y !== node.ui.y)){
+    if (ui && (ui?.x !== node.ui.x || ui?.y !== node.ui.y)) {
       logs.push(["NODE_LOCATION_CHANGED", `${formatModel(node, "node", "Node")} on ${formatModel(currentFloor, "floor", "Floor")} has been moved`, {
         buildings: [currentBuilding.id],
         floors: [currentFloor.id],
@@ -102,21 +99,17 @@ const updateNode = async ({
     }
     await node.save()
 
-    for(const [modelType, id, oldName, newName] of updateLogs){
+    for (const [modelType, id, oldName, newName] of updateLogs) {
       updateLog(modelType, id, oldName, newName)
     }
-    for(const [type, message, ids] of logs){
+    for (const [type, message, ids] of logs) {
       createLog(type, message, ids)
     }
 
     return new Node(node, context)
-  } catch(err){
+  } catch (err) {
     console.log(err)
     return null
   }
-    
-}
 
-module.exports = {
-  updateNode
 }

@@ -1,28 +1,28 @@
 // Import necessary packages
-const express = require("express")
-const mongoose = require("mongoose")
-const dotenv = require("dotenv")
-const WebSocket = require('ws')
-const authenticate = require("./middleware/authenticate")
-const rateLimiter = require("./middleware/rateLimiter")
-const authParse = require("./utils/authParse")
+import express, { json, urlencoded } from "express"
+import { connect } from "mongoose"
+import { config } from "dotenv"
+import { Server } from 'ws'
+import authenticate from "./middleware/authenticate"
+import rateLimiter from "./middleware/rateLimiter"
+import authParse from "./utils/authParse"
 
 // Import GraphQL related tools
-const { graphqlHTTP } = require("express-graphql")
-const { useServer } = require("graphql-ws/lib/use/ws")
-const { subscribe, execute } = require("graphql")
+import { graphqlHTTP } from "express-graphql"
+import { useServer } from "graphql-ws/lib/use/ws"
+import { subscribe, execute } from "graphql"
 
 // Import GraphQL schema and resolvers
-const { schema: graphqlSchema } = require("./graphql/typeDefs/schema");
-const { resolvers } = require("./graphql/resolvers/resolvers");
+import { schema as graphqlSchema } from "./graphql/typeDefs/schema"
+import { resolvers } from "./graphql/resolvers/resolvers"
 
 // Import /test router
-const test = require("./route/test")
-const headerMiddleWare = require("./middleware/header")
-const addHeaders = require("./utils/addHeaders")
+import test from "./route/test"
+import headerMiddleWare from "./middleware/header"
+import addHeaders from "./utils/addHeaders"
 
 // Load environment variables
-dotenv.config()
+config()
 
 // Create an instance of the Express application
 const app = express()
@@ -33,13 +33,13 @@ app.options('*', (req, res) => {
 })
 
 // Add rate limiter
-if(process.env.RATE_LIMIT !== "false") app.use(rateLimiter)
+if (process.env.RATE_LIMIT !== "false") app.use(rateLimiter)
 
 app.use(headerMiddleWare)
 
 // Parse incoming JSON and URL-encoded data
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(json())
+app.use(urlencoded({ extended: true }))
 
 // Apply the custom authentication middleware
 app.use(authenticate)
@@ -69,7 +69,7 @@ app.use("/graphql", graphqlHTTP((req, res) => ({
 })))
 
 // Connect to MongoDB using the conntextion string from environment variables
-mongoose.connect(process.env.DATABASE_URL).then(() => {
+connect(process.env.DATABASE_URL).then(() => {
   console.log("MongoDB connected")
 
   // Start the HTTP server and listen on the specified PORT
@@ -80,7 +80,7 @@ mongoose.connect(process.env.DATABASE_URL).then(() => {
 
     // Websocket configuration for GraphQL subscriptions
     const path = "/"
-    const wsServer = new WebSocket.Server({
+    const wsServer = new Server({
       server,
       path
     })

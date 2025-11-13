@@ -1,9 +1,5 @@
 // Change this to update Floor
 
-const updateFloorPlanSchema = `
+export const schema = `
   updateFloorPlan(createNodeInputs: [CreateNodeInput]!, updateNodeInputs: [UpdateNodeInput]!, id: ID!): FloorPlan
 `
-
-module.exports = {
-  schema: updateFloorPlanSchema
-}

@@ -1,7 +1,3 @@
-const updateNodeSchema = `
+export const schema = `
   updateNode(updateNodeInput: UpdateNodeInput!): Node
 `
-
-module.exports = {
-  schema: updateNodeSchema
-}

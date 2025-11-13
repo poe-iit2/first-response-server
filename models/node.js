@@ -1,6 +1,8 @@
 // Destructure Schema from Mongoose to define a schema for a MongoDB collection
-const { model, Schema } = require("mongoose")
-const { ObjectId } = require("mongoose").Types
+import { model, Schema, Types } from "mongoose"
+const { ObjectId } = Types
+import { logSchema } from "./log"
+import { floorSchema } from "./floor"
 
 // Define a schema for a "Node" collection
 const nodeSchema = new Schema({
@@ -48,17 +50,15 @@ const nodeSchema = new Schema({
 
 // Add a post-save hook to the schema
 nodeSchema.post("findOneAndDelete", async (doc) => {
-  if(!doc) return
-  const { logSchema } = require("./log")
-  const { floorSchema } = require("./floor")
+  if (!doc) return
   const LogModel = model("Log", logSchema)
 
-  if(!doc) return
+  if (!doc) return
   const logs = await LogModel.find({
-    nodes: { $in: [doc?.id]}
+    nodes: { $in: [doc?.id] }
   })
 
-  for(const log of logs){
+  for (const log of logs) {
     const regex = new RegExp(`\\(([^\\)]*)(${doc.name})([^\\)]*)\\)\\[node\\]\\[${doc.id}\\]`, 'g')
 
     log.message = log.message.replace(regex, (match, prefix, oldName, suffix) => {
@@ -96,7 +96,7 @@ nodeSchema.post("save", async (doc) => {
   // // middleware, which triggers the node delete middleware which triggers the
   // // invisibleNode middleware, which triggers the node save system
   // if(!floor) return
-  
+
   // floor.nodes = floor.nodes.filter(node => node._id.toString() !== doc._id.toString())
   // floor.nodes.push(doc._id)
   // await floor.save()
@@ -104,6 +104,6 @@ nodeSchema.post("save", async (doc) => {
 })
 
 // Export the node schema as part of an object
-module.exports = {
+export default {
   nodeSchema
 }

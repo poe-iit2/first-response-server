@@ -1,9 +1,9 @@
-const { $$asyncIterator } = require("iterall")
-const { model } = require("mongoose")
-const { nodeSchema } = require("../models/node")
+import { $$asyncIterator } from "iterall"
+import { model } from "mongoose"
+import { nodeSchema } from "../models/node"
 const NodeModel = model("Node", nodeSchema)
-const pubsub = require("../utils/pubsub")
-const Floor = require("../graphql/resolvers/floor")
+import { publish } from "../utils/pubsub"
+import Floor from "../graphql/resolvers/floor"
 
 function withNodeUpdate(
   asyncIteratorFn
@@ -14,11 +14,11 @@ function withNodeUpdate(
 
     const node = await NodeModel.findById(nodeId).exec()
 
-    if(node){
+    if (node) {
       node.state = "compromised"
       await node.save()
       // TODO: Create a log here
-      pubsub.publish("FLOOR_UPDATE", {
+      publish("FLOOR_UPDATE", {
         floorUpdate: Floor.build(node.floor.toString(), {
           isAuth: true
         })
@@ -44,6 +44,6 @@ function withNodeUpdate(
   }
 }
 
-module.exports = {
+export default {
   withNodeUpdate
 }

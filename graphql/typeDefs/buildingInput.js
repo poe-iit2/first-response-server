@@ -1,22 +1,18 @@
-const createBuildingInputSchema = `
+
+
+export const createBuildingInput = {
+  schema: `
   input CreateBuildingInput {
     name: String!
   }
 `
-
-const updateBuildingInputSchema = `
+}
+export const updateBuildingInput = {
+  schema: `
   input UpdateBuildingInput {
     id: ID!
     name: String
     isDeleted: Boolean
   }
 `
-
-module.exports = {
-  createBuildingInput: {
-    schema: createBuildingInputSchema
-  },
-  updateBuildingInput: {
-    schema: updateBuildingInputSchema
-  }
 }

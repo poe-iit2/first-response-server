@@ -1,10 +1,6 @@
-const logOutputSchema = `
+export const schema = `
   type LogOutput {
     logs: [Log]
     totalCount: Float
   }
-`
-
-module.exports = {
-  schema: logOutputSchema
-}
+`;

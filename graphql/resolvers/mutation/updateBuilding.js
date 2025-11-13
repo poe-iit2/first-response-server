@@ -1,26 +1,22 @@
-const { model } = require("mongoose")
-const { buildingSchema } = require("../../../models/building")
-const BuildingModel = model("Building", buildingSchema )
+import { model } from "mongoose"
+import { buildingSchema } from "../../../models/building"
+const BuildingModel = model("Building", buildingSchema)
 
-const Building = require("../building")
-const {
-  createLog,
-  formatModel,
-  updateLog
-} = require("../../../utils/createLog")
+import Building from "../building"
+import { createLog, formatModel, updateLog } from "../../../utils/createLog"
 
-const updateBuilding = async ({
+export async function updateBuilding({
   updateBuildingInput: { id, name, isDeleted }
-}, context) => {
-  if(!context?.isAuth) throw new Error("Error updating Building. You are not authenticated.")
+}, context) {
+  if (!context?.isAuth) throw new Error("Error updating Building. You are not authenticated.")
 
   const building = await BuildingModel.findById(id)
 
-  if(!building) {
+  if (!building) {
     throw new Error("Building not found")
   }
 
-  if(isDeleted) {
+  if (isDeleted) {
     await building.deleteOne()
     updateLog("building", building.id, building.name)
     createLog("BUILDING_DELETED", `Building ${building.name} has been deleted`)
@@ -30,7 +26,7 @@ const updateBuilding = async ({
 
   const logs = []
   const updateLogs = []
-  if(name?.length && name !== building.name){
+  if (name?.length && name !== building.name) {
     const oldName = building.name
     building.name = name
     updateLogs.push(["building", building.id, oldName, building.name])
@@ -38,17 +34,13 @@ const updateBuilding = async ({
       buildings: [id]
     }])
   }
-  
+
   await building.save()
-  for(const [modelType, id, oldName, newName] of updateLogs){
+  for (const [modelType, id, oldName, newName] of updateLogs) {
     updateLog(modelType, id, oldName, newName)
   }
-  for(const [type, message, ids] of logs){
+  for (const [type, message, ids] of logs) {
     createLog(type, message, ids)
   }
   return new Building(building, context)
-}
-
-module.exports = {
-  updateBuilding
 }

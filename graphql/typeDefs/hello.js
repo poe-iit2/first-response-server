@@ -1,9 +1,5 @@
-const helloSchema = `
+export const schema = `
   type Hello {
     message: String
   }
-`
-
-module.exports = {
-  schema: helloSchema
-}
+`;

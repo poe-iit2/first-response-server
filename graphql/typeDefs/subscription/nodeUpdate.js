@@ -1,7 +1,3 @@
-const nodeUpdateSchema = `
+export const schema = `
   nodeUpdate(id: ID!): Boolean
-`
-
-module.exports = {
-  schema: nodeUpdateSchema
-}
+`;

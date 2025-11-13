@@ -1,7 +1,3 @@
-const createFloorSchema = `
+export const schema = `
   createFloor(createFloorInput: CreateFloorInput!): Floor
 `
-
-module.exports = {
-  schema: createFloorSchema
-}

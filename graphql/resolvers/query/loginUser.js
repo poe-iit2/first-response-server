@@ -1,22 +1,22 @@
-const { model } = require("mongoose")
-const { userSchema } = require("../../../models/user")
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+import { model } from "mongoose"
+import { userSchema } from "../../../models/user"
+import { compare } from 'bcrypt'
+import { sign } from 'jsonwebtoken'
 
 const UserModel = model("User", userSchema)
 
-const User = require("../user")
+import User from "../user"
 
 // Define an asynchronous function to authenticate a user based on the provided 'email' and 'password'
 // The function expects an object with an 'email' and 'password' property
-const loginUser = async ({ email, password }, context) => {
+export async function loginUser({ email, password }, context) {
   let user = await UserModel.findOne({ email })
 
   if (!user) {
     throw new Error(`'No user with email: ${email} found`)
   }
 
-  const isValid = await bcrypt.compare(password, user.password)
+  const isValid = await compare(password, user.password)
 
   if (!isValid) {
     throw new Error("Invalid password")
@@ -25,7 +25,7 @@ const loginUser = async ({ email, password }, context) => {
   const userId = user.id
   const roles = user.roles
 
-  const token = jwt.sign({ userId, roles }, process.env.ACCESS_SECRET, { expiresIn: '7d' })
+  const token = sign({ userId, roles }, process.env.ACCESS_SECRET, { expiresIn: '7d' })
   const expiresIn = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 
   context.response.cookie('token', token, {
@@ -34,7 +34,7 @@ const loginUser = async ({ email, password }, context) => {
     sameSite: process.env.NODE_ENV === 'production' ? "None" : undefined,
     expires: expiresIn
   })
-  
+
   context.isAuth = true
   context.user = {
     userId,
@@ -49,6 +49,3 @@ const loginUser = async ({ email, password }, context) => {
     user
   }
 }
-
-// Export the 'loginUser' function to make it accessible from other modules
-module.exports = { loginUser }

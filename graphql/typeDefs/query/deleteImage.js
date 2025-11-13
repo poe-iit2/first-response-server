@@ -1,7 +1,3 @@
-const deleteImageSchema = `
+export const schema = `
   deleteImage(id: ID!): Boolean
 `
-
-module.exports = {
-  schema: deleteImageSchema
-}

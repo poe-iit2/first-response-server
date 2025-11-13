@@ -1,4 +1,7 @@
-const createNodeInputSchema = `
+
+
+export const createNodeInput = {
+  schema: `
   input CreateNodeInput {
     name: String!
     state: String!
@@ -7,18 +10,18 @@ const createNodeInputSchema = `
     connections: [NodeReferenceInput]
   }
 `
-// I need operation so I can know what to do with the node
-// Default is create
-
-const nodeReferenceInputSchema = `
+};
+export const nodeReferenceInput = {
+  schema: `
   input NodeReferenceInput {
     name: String!
     id: String
     direction: String!
   }
 `
-
-const updateNodeInputSchema = `
+};
+export const updateNodeInput = {
+  schema: `
   input UpdateNodeInput {
     id: ID
     name: String!
@@ -29,15 +32,6 @@ const updateNodeInputSchema = `
     operation: String
   }
 `
-
-module.exports = {
-  createNodeInput: {
-    schema: createNodeInputSchema
-  },
-  nodeReferenceInput: {
-    schema: nodeReferenceInputSchema
-  },
-  updateNodeInput: {
-    schema: updateNodeInputSchema
-  }
-}
+  // I need operation so I can know what to do with the node
+  // Default is create
+};

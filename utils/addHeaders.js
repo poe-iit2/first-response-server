@@ -1,4 +1,4 @@
-const { getAllowedOrigins } = require("../configs/allowedOrigins")
+import { getAllowedOrigins } from "../configs/allowedOrigins"
 
 const addHeaders = (req, res) => {
   const allowedOrigins = getAllowedOrigins()
@@ -13,4 +13,4 @@ const addHeaders = (req, res) => {
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, credentials')
 }
 
-module.exports = addHeaders
+export default addHeaders

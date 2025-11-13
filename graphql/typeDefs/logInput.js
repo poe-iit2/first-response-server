@@ -1,4 +1,4 @@
-const logInputSchema = `
+export const schema = `
   input LogInput {
     status: [String]
     nodes: [String]
@@ -8,8 +8,4 @@ const logInputSchema = `
     pageCount: Float
     date: Float
   }
-`
-
-module.exports = {
-  schema: logInputSchema
-}
+`;

@@ -1,10 +1,13 @@
 // Destructure Schema from Mongoose to define a schema for a MongoDB collection
-const { model, Schema } = require("mongoose")
+import { model, Schema } from "mongoose"
 
 // Destructure ObjectId type from Mongoose to use it as a reference type in the schema
-const { ObjectId } = require("mongoose").Types
+import { Types } from "mongoose"
+const { ObjectId } = Types
 
-const pubsub = require("../utils/pubsub")
+import pubsub from "../utils/pubsub"
+
+import { Building } from "../graphql/resolvers/building"
 
 // Define a schema for a "Building" collection
 const buildingSchema = new Schema({
@@ -23,7 +26,6 @@ const buildingSchema = new Schema({
 })
 
 buildingSchema.post("save", async (doc) => {
-  const Building = require("../graphql/resolvers/building")
   const BuildingModel = model("Building", buildingSchema)
   pubsub.publish("BUILDING_UPDATE", {
     buildingUpdate: Building.build(doc._id.toString(), {
@@ -43,16 +45,16 @@ buildingSchema.post("save", async (doc) => {
 })
 
 buildingSchema.post("findOneAndDelete", async (doc) => {
-  const { logSchema } = require("./log")
-  const { floorSchema } = require("./floor")
+  const { logSchema } = require("./log").default
+  const { floorSchema } = require("./floor").default
   const LogModel = model("Log", logSchema)
   const FloorModel = model("Floor", floorSchema)
 
   const logs = await LogModel.find({
-    buildings: { $in: [doc.id]}
+    buildings: { $in: [doc.id] }
   })
 
-  for(const log of logs){
+  for (const log of logs) {
     const regex = new RegExp(`\\(([^\\)]*)(${doc.name})([^\\)]*)\\)\\[building\\]\\[${doc.id}\\]`, 'g')
 
     log.message = log.message.replace(regex, (match, prefix, oldName, suffix) => {
@@ -64,7 +66,7 @@ buildingSchema.post("findOneAndDelete", async (doc) => {
     await log.save()
   }
 
-  for(const floorId of doc.floors){
+  for (const floorId of doc.floors) {
     await FloorModel.findOneAndDelete({
       _id: floorId
     })
@@ -72,6 +74,6 @@ buildingSchema.post("findOneAndDelete", async (doc) => {
 })
 
 // Export the building schema as part of an object
-module.exports = {
+export default {
   buildingSchema
 }

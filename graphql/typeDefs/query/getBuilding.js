@@ -1,7 +1,3 @@
-const getBuildingSchema = `
+export const schema = `
   getBuilding(id: ID!): Building
-`
-
-module.exports = {
-  schema: getBuildingSchema
-}
+`;

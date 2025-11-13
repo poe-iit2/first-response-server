@@ -1,7 +1,3 @@
-const getFloorSchema = `
+export const schema = `
   getFloor(id: ID!): Floor
-`
-
-module.exports = {
-  schema: getFloorSchema
-}
+`;

@@ -1,12 +1,8 @@
-const invisibleNodeSchema = `
+export const schema = `
   type InvisibleNode {
     id: ID!
     connectedNodes: [Node]!
     createdAt: String!
     updatedAt: String!
   }
-`
-
-module.exports = {
-  schema: invisibleNodeSchema
-}
+`;

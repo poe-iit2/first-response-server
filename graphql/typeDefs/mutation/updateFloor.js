@@ -1,7 +1,3 @@
-const updateFloorSchema = `
+export const schema = `
   updateFloor(updateFloorInput: UpdateFloorInput!): Floor
 `
-
-module.exports = {
-  schema: updateFloorSchema
-}
