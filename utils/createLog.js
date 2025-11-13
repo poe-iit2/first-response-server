@@ -3,7 +3,7 @@ import { model } from "mongoose"
 import { logSchema } from "../models/log"
 const LogModel = model("Log", logSchema)
 
-const createLog = (type, message, ids = {}) => {
+export const createLog = (type, message, ids = {}) => {
   const log = new LogModel({
     type,
     message,
@@ -15,11 +15,11 @@ const createLog = (type, message, ids = {}) => {
   log.save()
 }
 
-const formatModel = (initModel, modelType, prefix, suffix) => {
+export const formatModel = (initModel, modelType, prefix, suffix) => {
   return `(${prefix || ""}${prefix?.length ? " " : ""}${initModel.name}${suffix?.length ? " " : ""}${suffix || ""})[${modelType}][${initModel.id}]`
 }
 
-async function updateLog(modelType, id, oldName, newName) {
+export async function updateLog(modelType, id, oldName, newName) {
   const query = {}
   switch (modelType) {
     case "building":
@@ -72,10 +72,4 @@ const priorities = {
   BUILDING_CREATED: 3,
   BUILDING_DELETED: 4,
   BUILDING_NAME_CHANGE: 2
-}
-
-export default {
-  createLog,
-  formatModel,
-  updateLog
 }

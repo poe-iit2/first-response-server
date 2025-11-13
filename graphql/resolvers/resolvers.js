@@ -28,7 +28,7 @@ import { nodeUpdate } from "./subscription/nodeUpdate"
 import { sendHello } from "./subscription/sendHello"
 
 // Resolver
-export default {
+export const resolvers = {
   createBuilding,
   createFloor,
   createUser,

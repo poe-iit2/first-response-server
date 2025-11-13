@@ -5,7 +5,7 @@ const { ObjectId } = Types
 import { nodeSchema } from "./node"
 
 // Define a schema for a "Node" collection
-const invisibleNodeSchema = new Schema({
+export const invisibleNodeSchema = new Schema({
   connectedNodes: [
     {
       type: ObjectId,
@@ -50,8 +50,3 @@ invisibleNodeSchema.post("save", async (doc) => {
     await node.save()
   }
 })
-
-// Export the node schema as part of an object
-export default {
-  invisibleNodeSchema
-}

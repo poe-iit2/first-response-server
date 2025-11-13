@@ -5,7 +5,7 @@ const FloorModel = model("Floor", floorSchema)
 
 import Floor from "../floor"
 import { createLog, formatModel, updateLog } from "../../../utils/createLog"
-import { build } from "../building"
+import Building from "../building"
 
 export async function updateFloor({
   updateFloorInput: { id, name, buildingId, image, isDeleted }
@@ -40,7 +40,7 @@ export async function updateFloor({
     }
     if (buildingId?.length && buildingId !== floor.building._id.toString()) {
       try {
-        const newBuilding = await build(buildingId, context)
+        const newBuilding = await Building.build(buildingId, context)
         logs.push(["FLOOR_RELOCATED", `${formatModel(floor, "floor", "Floor")} has been moved to ${formatModel(newBuilding, "building", "Building")} from ${formatModel(currentBuilding, "building", "Building")} `, {
           buildings: [currentBuilding.id, newBuilding.id],
           floors: [floor.id]

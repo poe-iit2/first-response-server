@@ -6,7 +6,7 @@ import { Types } from "mongoose"
 const { ObjectId } = Types
 
 // Define a schema for a "User" collection
-const userSchema = new Schema({
+export const userSchema = new Schema({
   username: {
     type: String,
     required: false
@@ -35,11 +35,6 @@ const userSchema = new Schema({
   // Add createdAt and updatedAt timestamps to the schema automatically
   timestamps: true
 })
-
-// Export the user schema as part of an object
-export default {
-  userSchema
-}
 
 // Create a way to clearly define accountStatus, roles, etc.
 

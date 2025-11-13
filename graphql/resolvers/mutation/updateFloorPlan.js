@@ -22,9 +22,9 @@ connections{
 // Commenting for sanity
 // TODO: Use chatgpt later
 
-import { build } from "../floorPlan"
+import FloorPlan from "../floorPlan"
 import { createLog, formatModel, updateLog } from "../../../utils/createLog"
-import { build as _build } from "../floor"
+import Floor from "../floor"
 
 import { floorSchema } from "../../../models/floor"
 const FloorModel = model("Floor", floorSchema)
@@ -45,7 +45,7 @@ export async function updateFloorPlan({
   const nameMap = new Map()
   const deletedNodes = new Set()
   // Work on keeping this in functions since they are reused (updateNode e.t.c)
-  const currentFloor = await _build(id, context)
+  const currentFloor = await Floor.build(id, context)
   const floor = await FloorModel.findById(id)
   const currentBuilding = await currentFloor.building()
   for (const { id, name, state, isExit, ui, isDeleted } of updateNodeInputs) {
@@ -326,7 +326,7 @@ export async function updateFloorPlan({
 
   // }
 
-  const floorPlan = await build(id, context)
+  const floorPlan = await FloorPlan.build(id, context)
 
   return floorPlan
 }

@@ -3,7 +3,7 @@
 
 import { $$asyncIterator } from "iterall"
 
-function withAuthorisation(
+export function withAuthorisation(
   asyncIteratorFn,
   allowedRoles
 ) {
@@ -33,8 +33,4 @@ function withAuthorisation(
     }
     return asyncIterator2
   }
-}
-
-export default {
-  withAuthorisation
 }

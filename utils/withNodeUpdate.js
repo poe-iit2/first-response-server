@@ -2,10 +2,10 @@ import { $$asyncIterator } from "iterall"
 import { model } from "mongoose"
 import { nodeSchema } from "../models/node"
 const NodeModel = model("Node", nodeSchema)
-import { publish } from "../utils/pubsub"
+import pubsub from "../utils/pubsub"
 import Floor from "../graphql/resolvers/floor"
 
-function withNodeUpdate(
+export function withNodeUpdate(
   asyncIteratorFn
 ) {
   return async (args, context, info) => {
@@ -18,7 +18,7 @@ function withNodeUpdate(
       node.state = "compromised"
       await node.save()
       // TODO: Create a log here
-      publish("FLOOR_UPDATE", {
+      pubsub.publish("FLOOR_UPDATE", {
         floorUpdate: Floor.build(node.floor.toString(), {
           isAuth: true
         })
@@ -42,8 +42,4 @@ function withNodeUpdate(
     }
     return asyncIterator2
   }
-}
-
-export default {
-  withNodeUpdate
 }

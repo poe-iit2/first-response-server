@@ -3,7 +3,7 @@ import { logSchema } from "../../models/log"
 
 import Building from "./building"
 import Floor from "./floor"
-import { build as _build } from "./node"
+import Node from "./node"
 
 const LogModel = model("Log", logSchema)
 
@@ -53,7 +53,7 @@ export default class Log {
   async nodes() {
     const nodes = []
     for (const nodeId of this.log.nodes) {
-      const node = await _build(nodeId, this.context)
+      const node = await Node.build(nodeId, this.context)
       nodes.push(node)
     }
     return nodes

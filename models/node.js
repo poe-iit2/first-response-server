@@ -5,7 +5,7 @@ import { logSchema } from "./log"
 import { floorSchema } from "./floor"
 
 // Define a schema for a "Node" collection
-const nodeSchema = new Schema({
+export const nodeSchema = new Schema({
   name: String,
   state: {
     type: String,
@@ -102,8 +102,3 @@ nodeSchema.post("save", async (doc) => {
   // await floor.save()
 
 })
-
-// Export the node schema as part of an object
-export default {
-  nodeSchema
-}

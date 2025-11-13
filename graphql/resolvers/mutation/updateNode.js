@@ -4,7 +4,7 @@ import { nodeSchema } from "../../../models/node"
 const NodeModel = model("Node", nodeSchema)
 
 import Node from "../node"
-import { build } from "../floor"
+import Floor from "../floor"
 
 import { createLog, formatModel, updateLog } from "../../../utils/createLog"
 
@@ -18,7 +18,7 @@ export async function updateNode({
       const node = await NodeModel.findOneAndDelete({
         _id: new ObjectId(`${id}`)
       })
-      const currentFloor = await build(node.floor, context)
+      const currentFloor = await Floor.build(node.floor, context)
       const currentBuilding = await currentFloor.building()
       updateLog("node", node.id, node.name)
       createLog("NODE_DELETED", `Node ${node.name} on ${formatModel(currentFloor, "floor", "Floor")} has been deleted`, {
@@ -33,7 +33,7 @@ export async function updateNode({
     }
 
     const node = await NodeModel.findById(id)
-    const currentFloor = await build(node.floor, context)
+    const currentFloor = await Floor.build(node.floor, context)
     const currentBuilding = await currentFloor.building()
     const logs = [], updateLogs = []
 

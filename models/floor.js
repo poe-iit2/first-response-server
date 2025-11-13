@@ -9,13 +9,13 @@ const { ObjectId } = Types
 
 import pubsub from "../utils/pubsub"
 
-import * as Floor from "../graphql/resolvers/floor"
+import Floor from "../graphql/resolvers/floor"
 import { logSchema } from "./log"
 import { nodeSchema } from "./node"
 import { buildingSchema } from "./building"
 
 // Define a schema for a "Floor" collection
-const floorSchema = new Schema({
+export const floorSchema = new Schema({
   name: {
     type: String,
     required: true
@@ -119,8 +119,3 @@ floorSchema.post("findOneAndDelete", async (doc) => {
     await building.save()
   }
 })
-
-// Export the floor schema as part of an object
-export default {
-  floorSchema
-}

@@ -1,5 +1,6 @@
 import { model } from "mongoose"
 import { buildingSchema } from "../../models/building"
+import Floor from "./floor";
 const BuildingModel = model("Building", buildingSchema)
 
 // Define a 'Building' class to encapsulate building-related operations and data
@@ -29,7 +30,6 @@ export default class Building {
 
 
   async floors() {
-    const Floor = require("./floor").default
     const floors = this.building.floors || []
 
     const response = []

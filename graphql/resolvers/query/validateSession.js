@@ -1,8 +1,8 @@
-import { build } from "../user"
+import User from "../user"
 
 export async function validateSession({ }, context) {
   if (!context?.isAuth) throw new Error("Error validating session. You are not authenticated.")
 
-  const user = await build(context.user.userId, context)
+  const user = await User.build(context.user.userId, context)
   return user
 }

@@ -1,5 +1,7 @@
 import { model } from "mongoose"
 import { floorSchema } from "../../models/floor"
+import Building from "./building"
+import Node from "./node"
 
 const FloorModel = model("Floor", floorSchema)
 
@@ -41,14 +43,12 @@ export default class Floor {
   }
 
   async building() {
-    const Building = require("./building").default
     const buildingId = this.floor.building
     const building = await Building.build(buildingId, this.context)
     return building
   }
 
   async nodes() {
-    const Node = require("./node").default
     const nodes = []
     for (const nodeId of this.floor.nodes) {
       try {

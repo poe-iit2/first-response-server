@@ -7,8 +7,8 @@ const BuildingModel = model("Building", buildingSchema)
 const FloorModel = model("Floor", floorSchema)
 const NodeModel = model("Node", nodeSchema)
 
-import Floor, { build } from "../floor"
-import Building, { build as _build } from "../building"
+import Floor from "../floor"
+import Building from "../building"
 import { createLog, formatModel, updateLog } from "../../../utils/createLog"
 import deleteImage from "../../../utils/deleteImage"
 
@@ -58,7 +58,7 @@ export async function createFloor({
 
     if (buildingId?.length && buildingId !== floor.building._id.toString()) {
       try {
-        const newBuilding = await _build(buildingId, context)
+        const newBuilding = await Building.build(buildingId, context)
         logs.push(["FLOOR_RELOCATED", `${formatModel(floor, "floor", "Floor")} has been moved to ${formatModel(newBuilding, "building", "Building")} from ${formatModel(currentBuilding, "building", "Building")} `, {
           buildings: [currentBuilding.id, newBuilding.id],
           floors: [floor.id]
@@ -274,7 +274,7 @@ export async function createFloor({
     }
 
     await floor.save()
-    floor = await build(floor.id, context)
+    floor = await Floor.build(floor.id, context)
     // TODO: Create the logs in logs, and updateLogs!
     return floor
   } catch (e) {

@@ -1,4 +1,4 @@
-import { build } from "../floorPlan"
+import FloorPlan from "../floorPlan"
 
 // args, context, info
 
@@ -7,7 +7,7 @@ import { build } from "../floorPlan"
 export async function getFloorPlan({ id }, context) {
   if (!context?.isAuth) throw new Error("Error retrieving Floor data. You are not authenticated.")
 
-  const floorPlan = await build(id, context)
+  const floorPlan = await FloorPlan.build(id, context)
 
   return floorPlan
 }

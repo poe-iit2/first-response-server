@@ -7,10 +7,12 @@ const { ObjectId } = Types
 
 import pubsub from "../utils/pubsub"
 
-import { Building } from "../graphql/resolvers/building"
+import Building from "../graphql/resolvers/building"
+import { logSchema } from "./log"
+import { floorSchema } from "./floor"
 
 // Define a schema for a "Building" collection
-const buildingSchema = new Schema({
+export const buildingSchema = new Schema({
   name: {
     type: String,
     required: true
@@ -45,8 +47,6 @@ buildingSchema.post("save", async (doc) => {
 })
 
 buildingSchema.post("findOneAndDelete", async (doc) => {
-  const { logSchema } = require("./log").default
-  const { floorSchema } = require("./floor").default
   const LogModel = model("Log", logSchema)
   const FloorModel = model("Floor", floorSchema)
 
@@ -72,8 +72,3 @@ buildingSchema.post("findOneAndDelete", async (doc) => {
     })
   }
 })
-
-// Export the building schema as part of an object
-export default {
-  buildingSchema
-}

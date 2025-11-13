@@ -1,6 +1,6 @@
 const allowedOrigins = []
 
-export default function getAllowedOrigins() {
+export function getAllowedOrigins() {
   if (allowedOrigins.length !== 0) return allowedOrigins
 
   if (process.env.NODE_ENV === 'production') {

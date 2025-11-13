@@ -3,7 +3,7 @@ import mongoose from "mongoose"
 const { Schema, Types: { ObjectId } } = mongoose
 
 // Define a schema for a "Log" collection
-const logSchema = new Schema({
+export const logSchema = new Schema({
   type: {
     type: String,
     required: true
@@ -30,8 +30,3 @@ const logSchema = new Schema({
   timestamps: true,
   versionKey: false
 })
-
-// Export the log schema as part of an object
-export default {
-  logSchema
-}
