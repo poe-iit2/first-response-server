@@ -4,11 +4,11 @@
 // Logic for connections and stuffs like that
 import mongoose from "mongoose"
 const { model, Types: { ObjectId } } = mongoose
-import { nodeSchema } from "../../../models/node"
+import { nodeSchema } from "../../../models/node.js"
 
 const NodeModel = model("Node", nodeSchema)
 
-import { invisibleNodeSchema } from "../../../models/invisibleNode"
+import { invisibleNodeSchema } from "../../../models/invisibleNode.js"
 const InvisibleNodeModel = model("InvisibleNode", invisibleNodeSchema)
 
 // Keep checks in place to prevent duplicate invisible nodes from being created
@@ -22,11 +22,11 @@ connections{
 // Commenting for sanity
 // TODO: Use chatgpt later
 
-import FloorPlan from "../floorPlan"
-import { createLog, formatModel, updateLog } from "../../../utils/createLog"
-import Floor from "../floor"
+import FloorPlan from "../floorPlan.js"
+import { createLog, formatModel, updateLog } from "../../../utils/createLog.js"
+import Floor from "../floor.js"
 
-import { floorSchema } from "../../../models/floor"
+import { floorSchema } from "../../../models/floor.js"
 const FloorModel = model("Floor", floorSchema)
 
 // Remember to change the function to updateFloor

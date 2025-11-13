@@ -2,10 +2,10 @@
 import express, { json, urlencoded } from "express"
 import { connect } from "mongoose"
 import { config } from "dotenv"
-import { Server } from 'ws'
-import authenticate from "./middleware/authenticate"
-import rateLimiter from "./middleware/rateLimiter"
-import authParse from "./utils/authParse"
+import { WebSocketServer } from 'ws'
+import authenticate from "./middleware/authenticate.js"
+import rateLimiter from "./middleware/rateLimiter.js"
+import authParse from "./utils/authParse.js"
 
 // Import GraphQL related tools
 import { graphqlHTTP } from "express-graphql"
@@ -13,13 +13,13 @@ import { useServer } from "graphql-ws/lib/use/ws"
 import { subscribe, execute } from "graphql"
 
 // Import GraphQL schema and resolvers
-import { schema as graphqlSchema } from "./graphql/typeDefs/schema"
-import { resolvers } from "./graphql/resolvers/resolvers"
+import { schema as graphqlSchema } from "./graphql/typeDefs/schema.js"
+import { resolvers } from "./graphql/resolvers/resolvers.js"
 
 // Import /test router
-import test from "./route/test"
-import headerMiddleWare from "./middleware/header"
-import addHeaders from "./utils/addHeaders"
+import test from "./route/test.js"
+import headerMiddleWare from "./middleware/header.js"
+import addHeaders from "./utils/addHeaders.js"
 
 // Load environment variables
 config()
@@ -31,6 +31,14 @@ app.options('*', (req, res) => {
   addHeaders(req, res)
   res.sendStatus(200)
 })
+
+// GraphQL API endpoint, enables graphiql UI and sets up schema, resolvers, and context
+app.use("/graphql", graphqlHTTP((req, res) => ({
+  schema: extendedSchema,
+  rootValue: extendedResolvers,
+  context: createContext(req, res),
+  graphiql: true
+})));
 
 // Add rate limiter
 if (process.env.RATE_LIMIT !== "false") app.use(rateLimiter)
@@ -80,7 +88,7 @@ connect(process.env.DATABASE_URL).then(() => {
 
     // Websocket configuration for GraphQL subscriptions
     const path = "/"
-    const wsServer = new Server({
+    const wsServer = new WebSocketServer({
       server,
       path
     })

@@ -1,9 +1,9 @@
 import { model } from "mongoose"
-import { buildingSchema } from "../../../models/building"
+import { buildingSchema } from "../../../models/building.js"
 const BuildingModel = model("Building", buildingSchema)
 
-import Building from "../building"
-import { createLog, formatModel } from "../../../utils/createLog"
+import Building from "../building.js"
+import { createLog, formatModel } from "../../../utils/createLog.js"
 
 export async function createBuilding({ createBuildingInput: { name } }, context) {
   if (!context?.isAuth) throw new Error("Error creating Building. You are not authenticated.")

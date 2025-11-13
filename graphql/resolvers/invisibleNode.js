@@ -1,5 +1,5 @@
 import { model } from "mongoose"
-import { invisibleNodeSchema } from "../../models/invisibleNode"
+import { invisibleNodeSchema } from "../../models/invisibleNode.js"
 
 const InvisibleNodeModel = model("InvisibleNode", invisibleNodeSchema)
 

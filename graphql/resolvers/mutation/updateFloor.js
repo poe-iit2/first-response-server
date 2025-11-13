@@ -1,11 +1,11 @@
 import mongoose from "mongoose"
 const { model, Types: { ObjectId } } = mongoose
-import { floorSchema } from "../../../models/floor"
+import { floorSchema } from "../../../models/floor.js"
 const FloorModel = model("Floor", floorSchema)
 
-import Floor from "../floor"
-import { createLog, formatModel, updateLog } from "../../../utils/createLog"
-import Building from "../building"
+import Floor from "../floor.js"
+import { createLog, formatModel, updateLog } from "../../../utils/createLog.js"
+import Building from "../building.js"
 
 export async function updateFloor({
   updateFloorInput: { id, name, buildingId, image, isDeleted }

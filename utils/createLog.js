@@ -1,6 +1,6 @@
 import { model } from "mongoose"
 
-import { logSchema } from "../models/log"
+import { logSchema } from "../models/log.js"
 const LogModel = model("Log", logSchema)
 
 export const createLog = (type, message, ids = {}) => {

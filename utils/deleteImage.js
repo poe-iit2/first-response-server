@@ -1,5 +1,5 @@
 // deleteImage.js
-import cloudinary from './cloudinaryConfig';
+import cloudinary from './cloudinaryConfig.js';
 
 export default async function deleteImage(publicId) {
   await cloudinary.uploader.destroy(publicId)

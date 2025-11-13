@@ -1,18 +1,18 @@
 // Destructure Schema from Mongoose to define a schema for a MongoDB collection
 import { model, Schema } from "mongoose"
 
-import deleteImage from "../utils/deleteImage"
+import deleteImage from "../utils/deleteImage.js"
 
 // Destructure ObjectId type from Mongoose to use it as a reference type in the schema
 import { Types } from "mongoose"
 const { ObjectId } = Types
 
-import pubsub from "../utils/pubsub"
+import pubsub from "../utils/pubsub.js"
 
-import Floor from "../graphql/resolvers/floor"
-import { logSchema } from "./log"
-import { nodeSchema } from "./node"
-import { buildingSchema } from "./building"
+import Floor from "../graphql/resolvers/floor.js"
+import { logSchema } from "./log.js"
+import { nodeSchema } from "./node.js"
+import { buildingSchema } from "./building.js"
 
 // Define a schema for a "Floor" collection
 export const floorSchema = new Schema({

@@ -1,9 +1,9 @@
 import { model } from "mongoose"
-import { buildingSchema } from "../../../models/building"
+import { buildingSchema } from "../../../models/building.js"
 const BuildingModel = model("Building", buildingSchema)
 
-import Building from "../building"
-import { createLog, formatModel, updateLog } from "../../../utils/createLog"
+import Building from "../building.js"
+import { createLog, formatModel, updateLog } from "../../../utils/createLog.js"
 
 export async function updateBuilding({
   updateBuildingInput: { id, name, isDeleted }

@@ -1,12 +1,12 @@
 import mongoose from "mongoose"
 const { model, Types: { ObjectId } } = mongoose
-import { nodeSchema } from "../../../models/node"
+import { nodeSchema } from "../../../models/node.js"
 const NodeModel = model("Node", nodeSchema)
 
-import Node from "../node"
-import Floor from "../floor"
+import Node from "../node.js"
+import Floor from "../floor.js"
 
-import { createLog, formatModel, updateLog } from "../../../utils/createLog"
+import { createLog, formatModel, updateLog } from "../../../utils/createLog.js"
 
 // Work on adding the invisibleNodes logic to the node update
 export async function updateNode({

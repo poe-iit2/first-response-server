@@ -1,11 +1,12 @@
 import { model } from "mongoose"
-import { userSchema } from "../../../models/user"
+import { userSchema } from "../../../models/user.js"
 import { compare } from 'bcrypt'
-import { sign } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+const { sign } = jwt
+import User from "../user.js"
 
 const UserModel = model("User", userSchema)
 
-import User from "../user"
 
 // Define an asynchronous function to authenticate a user based on the provided 'email' and 'password'
 // The function expects an object with an 'email' and 'password' property

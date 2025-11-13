@@ -1,11 +1,12 @@
 import { model } from "mongoose"
-import { userSchema } from "../../../models/user"
+import { userSchema } from "../../../models/user.js"
 import { hash } from 'bcrypt'
-import { sign } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+const { sign } = jwt
 
 const UserModel = model("User", userSchema)
 
-import User from "../user"
+import User from "../user.js"
 
 // Define an asynchronous function to create a user based on the provided 'email' and 'password'
 // The function expects an object with an 'email' and 'password' property

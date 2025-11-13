@@ -1,16 +1,16 @@
 import mongoose from "mongoose"
 const { model, Types: { ObjectId } } = mongoose
-import { buildingSchema } from "../../../models/building"
-import { floorSchema } from "../../../models/floor"
-import { nodeSchema } from "../../../models/node"
+import { buildingSchema } from "../../../models/building.js"
+import { floorSchema } from "../../../models/floor.js"
+import { nodeSchema } from "../../../models/node.js"
 const BuildingModel = model("Building", buildingSchema)
 const FloorModel = model("Floor", floorSchema)
 const NodeModel = model("Node", nodeSchema)
 
-import Floor from "../floor"
-import Building from "../building"
-import { createLog, formatModel, updateLog } from "../../../utils/createLog"
-import deleteImage from "../../../utils/deleteImage"
+import Floor from "../floor.js"
+import Building from "../building.js"
+import { createLog, formatModel, updateLog } from "../../../utils/createLog.js"
+import deleteImage from "../../../utils/deleteImage.js"
 
 export async function createFloor({
   createFloorInput: { name, id, buildingId, image, isDeleted, nodes }

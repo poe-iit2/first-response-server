@@ -1,4 +1,4 @@
-import deleteCloudinaryImage from "../../../utils/deleteImage";
+import deleteCloudinaryImage from "../../../utils/deleteImage.js";
 
 // Define an asynchronous function to generate a cryptographic signature based on the provided 'id'
 // The function expects an object with an 'id' property

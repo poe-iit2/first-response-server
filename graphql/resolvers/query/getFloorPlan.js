@@ -1,4 +1,4 @@
-import FloorPlan from "../floorPlan"
+import FloorPlan from "../floorPlan.js"
 
 // args, context, info
 

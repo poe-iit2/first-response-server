@@ -1,4 +1,4 @@
-import pubsub from "../../../utils/pubsub"
+import pubsub from "../../../utils/pubsub.js"
 // const { withAuthorisation } = require("../../../utils/withAuthorisation")
 
 // Define a filtered subscription for building updates using 'withFilter'

@@ -1,52 +1,52 @@
 import { buildSchema } from "graphql";
 
-import * as createBuilding from "./mutation/createBuilding";
-import * as createFloor from "./mutation/createFloor";
-import * as createUser from "./mutation/createUser";
-import * as updateBuilding from "./mutation/updateBuilding";
-import * as updateFloor from "./mutation/updateFloor";
-import * as updateFloorPlan from "./mutation/updateFloorPlan";
-import * as updateNode from "./mutation/updateNode";
+import * as createBuilding from "./mutation/createBuilding.js";
+import * as createFloor from "./mutation/createFloor.js";
+import * as createUser from "./mutation/createUser.js";
+import * as updateBuilding from "./mutation/updateBuilding.js";
+import * as updateFloor from "./mutation/updateFloor.js";
+import * as updateFloorPlan from "./mutation/updateFloorPlan.js";
+import * as updateNode from "./mutation/updateNode.js";
 
-import * as deleteImage from "./query/deleteImage";
-import * as generateSignature from "./query/generateSignature";
-import * as getBuilding from "./query/getBuilding";
-import * as getBuildings from "./query/getBuildings";
-import * as getFloor from "./query/getFloor";
-import * as getFloorPlan from "./query/getFloorPlan";
-import * as getFloors from "./query/getFloors";
-import * as getLogs from "./query/getLogs";
-import * as loginUser from "./query/loginUser";
-import * as logoutUser from "./query/logoutUser";
-import * as validateSession from "./query/validateSession";
+import * as deleteImage from "./query/deleteImage.js";
+import * as generateSignature from "./query/generateSignature.js";
+import * as getBuilding from "./query/getBuilding.js";
+import * as getBuildings from "./query/getBuildings.js";
+import * as getFloor from "./query/getFloor.js";
+import * as getFloorPlan from "./query/getFloorPlan.js";
+import * as getFloors from "./query/getFloors.js";
+import * as getLogs from "./query/getLogs.js";
+import * as loginUser from "./query/loginUser.js";
+import * as logoutUser from "./query/logoutUser.js";
+import * as validateSession from "./query/validateSession.js";
 
-import * as buildingUpdate from "./subscription/buildingUpdate";
-import * as buildingUpdates from "./subscription/buildingUpdates";
-import * as floorUpdate from "./subscription/floorUpdate";
-import * as nodeUpdate from "./subscription/nodeUpdate";
-import * as sendHello from "./subscription/sendHello";
+import * as buildingUpdate from "./subscription/buildingUpdate.js";
+import * as buildingUpdates from "./subscription/buildingUpdates.js";
+import * as floorUpdate from "./subscription/floorUpdate.js";
+import * as nodeUpdate from "./subscription/nodeUpdate.js";
+import * as sendHello from "./subscription/sendHello.js";
 
-import * as building from "./building";
-import * as floor from "./floor";
-import * as floorPlan from "./floorPlan";
-import * as floorImage from "./floorImage";
-import * as hello from "./hello";
-import * as invisibleNode from "./invisibleNode";
-import * as log from "./log";
-import * as login from "./login";
-import * as logOutput from "./logOutput";
-import * as node from "./node";
-import * as nodeUI from "./nodeUI";
-import * as signature from "./signature";
-import * as status from "./status";
-import * as user from "./user";
+import * as building from "./building.js";
+import * as floor from "./floor.js";
+import * as floorPlan from "./floorPlan.js";
+import * as floorImage from "./floorImage.js";
+import * as hello from "./hello.js";
+import * as invisibleNode from "./invisibleNode.js";
+import * as log from "./log.js";
+import * as login from "./login.js";
+import * as logOutput from "./logOutput.js";
+import * as node from "./node.js";
+import * as nodeUI from "./nodeUI.js";
+import * as signature from "./signature.js";
+import * as status from "./status.js";
+import * as user from "./user.js";
 
-import { createBuildingInput, updateBuildingInput } from "./buildingInput";
-import * as floorImageInput from "./floorImageInput";
-import { createFloorInput, updateFloorInput } from "./floorInput";
-import { createNodeInput, nodeReferenceInput, updateNodeInput } from "./nodeInput";
-import * as nodeUIInput from "./nodeUIInput";
-import * as logInput from "./logInput";
+import * as buildingInput from "./buildingInput.js";
+import * as floorImageInput from "./floorImageInput.js";
+import * as floorInput from "./floorInput.js";
+import * as nodeInput from "./nodeInput.js";
+import * as nodeUIInput from "./nodeUIInput.js";
+import * as logInput from "./logInput.js";
 
 export const schema = buildSchema(`
   type Mutation {

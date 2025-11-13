@@ -1,9 +1,9 @@
 import { model } from "mongoose"
-import { buildingSchema } from "../../../models/building"
+import { buildingSchema } from "../../../models/building.js"
 
 const BuildingModel = model("Building", buildingSchema)
 
-import Building from "../building"
+import Building from "../building.js"
 
 // Define an asynchronous function to fetch all buildings
 export async function getBuildings(_, context) {

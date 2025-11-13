@@ -5,11 +5,11 @@ import { model, Schema } from "mongoose"
 import { Types } from "mongoose"
 const { ObjectId } = Types
 
-import pubsub from "../utils/pubsub"
+import pubsub from "../utils/pubsub.js"
 
-import Building from "../graphql/resolvers/building"
-import { logSchema } from "./log"
-import { floorSchema } from "./floor"
+import Building from "../graphql/resolvers/building.js"
+import { logSchema } from "./log.js"
+import { floorSchema } from "./floor.js"
 
 // Define a schema for a "Building" collection
 export const buildingSchema = new Schema({
@@ -72,3 +72,5 @@ buildingSchema.post("findOneAndDelete", async (doc) => {
     })
   }
 })
+
+export const BuildingModel = model("Building", buildingSchema)

@@ -1,5 +1,5 @@
 import { createHash } from "crypto";
-import Signature from "../signature";
+import Signature from "../signature.js";
 
 // Define an asynchronous function to generate a cryptographic signature based on the provided 'id'
 // The function expects an object with an 'id' property

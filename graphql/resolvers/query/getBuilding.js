@@ -1,4 +1,4 @@
-import Building from "../building"
+import Building from "../building.js"
 
 // Define an asynchronous function to fetch a building based on the provided 'id'
 // The function expects an object with an 'id' property

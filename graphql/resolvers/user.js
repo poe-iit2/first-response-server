@@ -1,5 +1,5 @@
 import { model } from "mongoose"
-import { userSchema } from "../../models/user"
+import { userSchema } from "../../models/user.js"
 
 const UserModel = model("User", userSchema)
 

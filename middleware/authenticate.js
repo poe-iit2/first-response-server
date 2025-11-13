@@ -1,4 +1,4 @@
-import authParse from "../utils/authParse"
+import authParse from "../utils/authParse.js"
 
 // Middleware function to authenticate tokens in incoming requests
 export default function authenticateToken(req, _, next) {

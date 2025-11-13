@@ -1,12 +1,13 @@
 
 // Import the Express Router to create modular route handlers
-const router = require("express").Router()
+import express from 'express'
+const router = express.Router()
 
 // Import pubsub helper for publishing events
-import pubsub from "../utils/pubsub"
+import pubsub from "../utils/pubsub.js"
 
 // Import the Floor resolver to handle fetching floor data
-import Floor from "../graphql/resolvers/floor"
+import Floor from "../graphql/resolvers/floor.js"
 
 // Route to send a 'hello' message using pubsub
 router.get("/send_hello", (_, res) => {

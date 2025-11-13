@@ -2,7 +2,7 @@
 import { model, Schema } from "mongoose"
 import { Types } from "mongoose"
 const { ObjectId } = Types
-import { nodeSchema } from "./node"
+import { nodeSchema } from "./node.js"
 
 // Define a schema for a "Node" collection
 export const invisibleNodeSchema = new Schema({

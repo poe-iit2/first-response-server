@@ -1,8 +1,8 @@
 // Destructure Schema from Mongoose to define a schema for a MongoDB collection
 import { model, Schema, Types } from "mongoose"
 const { ObjectId } = Types
-import { logSchema } from "./log"
-import { floorSchema } from "./floor"
+import { logSchema } from "./log.js"
+import { floorSchema } from "./floor.js"
 
 // Define a schema for a "Node" collection
 export const nodeSchema = new Schema({

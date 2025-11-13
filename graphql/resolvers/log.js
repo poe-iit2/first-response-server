@@ -1,9 +1,9 @@
 import { model } from "mongoose"
-import { logSchema } from "../../models/log"
+import { logSchema } from "../../models/log.js"
 
-import Building from "./building"
-import Floor from "./floor"
-import Node from "./node"
+import Building from "./building.js"
+import Floor from "./floor.js"
+import Node from "./node.js"
 
 const LogModel = model("Log", logSchema)
 

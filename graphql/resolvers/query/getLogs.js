@@ -1,10 +1,10 @@
 import mongoose from "mongoose"
 const { model, Types: { ObjectId } } = mongoose
-import { logSchema } from "../../../models/log"
+import { logSchema } from "../../../models/log.js"
 
 const LogModel = model("Log", logSchema)
 
-import Log from "../log"
+import Log from "../log.js"
 
 // In the future filter based on which building they have permission in
 export async function getLogs({ logInput }, context) {

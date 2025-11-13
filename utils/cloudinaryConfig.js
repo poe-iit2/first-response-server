@@ -1,6 +1,7 @@
 // cloudinaryConfig.js
 import { v2 as cloudinary } from 'cloudinary';
-require('dotenv').config();
+import dotenv from 'dotenv'
+dotenv.config();
 
 // Configure Cloudinary
 cloudinary.config({

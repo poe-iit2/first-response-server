@@ -1,5 +1,5 @@
 // Make a more sophisicated model where tokens are stored in the database and can be refreshed/invalidated
-import Status from "../status"
+import Status from "../status.js"
 
 // Define an asynchronous function to authenticate a user based on the provided 'email' and 'password'
 // The function expects an object with an 'email' and 'password' property

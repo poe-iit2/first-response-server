@@ -1,9 +1,9 @@
 import { $$asyncIterator } from "iterall"
 import { model } from "mongoose"
-import { nodeSchema } from "../models/node"
+import { nodeSchema } from "../models/node.js"
 const NodeModel = model("Node", nodeSchema)
-import pubsub from "../utils/pubsub"
-import Floor from "../graphql/resolvers/floor"
+import pubsub from "../utils/pubsub.js"
+import Floor from "../graphql/resolvers/floor.js"
 
 export function withNodeUpdate(
   asyncIteratorFn

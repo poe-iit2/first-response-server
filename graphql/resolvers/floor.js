@@ -1,7 +1,7 @@
 import { model } from "mongoose"
-import { floorSchema } from "../../models/floor"
-import Building from "./building"
-import Node from "./node"
+import { floorSchema } from "../../models/floor.js"
+import Building from "./building.js"
+import Node from "./node.js"
 
 const FloorModel = model("Floor", floorSchema)
 

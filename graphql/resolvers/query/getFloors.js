@@ -1,9 +1,9 @@
 import { model } from "mongoose"
-import { floorSchema } from "../../../models/floor"
+import { floorSchema } from "../../../models/floor.js"
 
 const FloorModel = model("Floor", floorSchema)
 
-import Floor from "../floor"
+import Floor from "../floor.js"
 
 // Define an asynchronous function to fetch all floors
 export async function getFloors(_, context) {

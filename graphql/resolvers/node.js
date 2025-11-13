@@ -1,6 +1,6 @@
 import { model } from "mongoose"
-import { nodeSchema } from "../../models/node"
-import Floor from "./floor"
+import { nodeSchema } from "../../models/node.js"
+import Floor from "./floor.js"
 
 const NodeModel = model("Node", nodeSchema)
 

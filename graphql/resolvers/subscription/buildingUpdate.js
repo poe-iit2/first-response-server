@@ -1,6 +1,6 @@
 import { model } from "mongoose"
-import pubsub from "../../../utils/pubsub"
-import { withFilter } from "../../../utils/withFilter"
+import pubsub from "../../../utils/pubsub.js"
+import { withFilter } from "../../../utils/withFilter.js"
 import { PubSub } from "graphql-subscriptions"
 // const { withAuthorisation } = require("../../../utils/withAuthorisation")
 

@@ -1,5 +1,6 @@
 // Import the jsonwebtoken library to handle JWT verification
-import { verify } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+const { verify } = jwt
 
 // Middleware function to authenticate tokens in incoming requests
 export default function authParse(req) {

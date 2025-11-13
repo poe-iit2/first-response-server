@@ -1,4 +1,4 @@
-import { getAllowedOrigins } from "../configs/allowedOrigins"
+import { getAllowedOrigins } from "../configs/allowedOrigins.js"
 
 const addHeaders = (req, res) => {
   const allowedOrigins = getAllowedOrigins()
