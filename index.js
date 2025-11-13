@@ -32,14 +32,6 @@ app.options('*', (req, res) => {
   res.sendStatus(200)
 })
 
-// GraphQL API endpoint, enables graphiql UI and sets up schema, resolvers, and context
-app.use("/graphql", graphqlHTTP((req, res) => ({
-  schema: extendedSchema,
-  rootValue: extendedResolvers,
-  context: createContext(req, res),
-  graphiql: true
-})));
-
 // Add rate limiter
 if (process.env.RATE_LIMIT !== "false") app.use(rateLimiter)
 
