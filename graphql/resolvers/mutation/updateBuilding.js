@@ -5,6 +5,12 @@ const BuildingModel = model("Building", buildingSchema)
 import Building from "../building.js"
 import { createLog, formatModel, updateLog } from "../../../utils/createLog.js"
 
+/**
+ * 
+ * @param {{updateBuildingInput: import("../schema.d.ts").UpdateBuildingInput}} param0 
+ * @param {*} context 
+ * @returns {Promise<Building | null>}
+ */
 export async function updateBuilding({
   updateBuildingInput: { id, name, isDeleted }
 }, context) {

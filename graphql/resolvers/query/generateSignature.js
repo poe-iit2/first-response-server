@@ -3,6 +3,12 @@ import Signature from "../signature.js";
 
 // Define an asynchronous function to generate a cryptographic signature based on the provided 'id'
 // The function expects an object with an 'id' property
+/**
+ * 
+ * @param {{id: import("graphql-ws").ID}} param0 
+ * @param {*} context 
+ * @returns {Promise<Signature>}
+ */
 export async function generateSignature({ id }, context) {
   // Create a wrapper of some sort so you don't have to do this on every query
   if (!context?.isAuth) throw new Error("Error generating Signature. You are not authenticated.")
@@ -12,10 +18,10 @@ export async function generateSignature({ id }, context) {
     public_id: id,
     timestamp
   };
-
-  const param_string = Object.keys(params_to_sign)
+  Object.entries
+  const param_string = Object.entries(params_to_sign)
     .sort()
-    .map(key => `${key}=${params_to_sign[key]}`)
+    .map(([key, value]) => `${key}=${value}`)
     .join("&");
 
   // Using SHA-256 for hashing instead of SHA-1

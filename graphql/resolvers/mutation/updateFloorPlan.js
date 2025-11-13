@@ -32,6 +32,15 @@ const FloorModel = model("Floor", floorSchema)
 // Remember to change the function to updateFloor
 
 // Main function... it's downhill from here
+/**
+ * @param {{
+ *  createNodeInputs: Array<import("../schema.d.ts").CreateNodeInput>,
+ *  updateNodeInputs: Array<import("../schema.d.ts").UpdateNodeInput>,
+ *  id: import("graphql-ws").ID
+ * }} param0 
+ * @param {*} context 
+ * @returns 
+ */
 export async function updateFloorPlan({
   createNodeInputs, // Check the schema to know what you're dealing with
   updateNodeInputs,

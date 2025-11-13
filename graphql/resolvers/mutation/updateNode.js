@@ -9,6 +9,12 @@ import Floor from "../floor.js"
 import { createLog, formatModel, updateLog } from "../../../utils/createLog.js"
 
 // Work on adding the invisibleNodes logic to the node update
+/**
+ * 
+ * @param {{updateNodeInput: import("../schema.d.ts").UpdateNodeInput}} param0 
+ * @param {*} context 
+ * @returns {Promise<Node?>}
+ */
 export async function updateNode({
   updateNodeInput: { id, name, state, isExit, ui, isDeleted }
 }, context) {

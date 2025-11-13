@@ -6,6 +6,11 @@ const FloorModel = model("Floor", floorSchema)
 import Floor from "../floor.js"
 
 // Define an asynchronous function to fetch all floors
+/**
+ * @param {any} _
+ * @param {any} context
+ * @returns {Promise<Array<Floor>>}
+ */
 export async function getFloors(_, context) {
   if (!context?.isAuth) throw new Error("Error retrieving Floor data. You are not authenticated.")
   const floors = await FloorModel.find() || []

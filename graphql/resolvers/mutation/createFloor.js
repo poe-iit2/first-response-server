@@ -12,6 +12,11 @@ import Building from "../building.js"
 import { createLog, formatModel, updateLog } from "../../../utils/createLog.js"
 import deleteImage from "../../../utils/deleteImage.js"
 
+/**
+ * @param {{ createFloorInput: import("../schema.d.ts").CreateFloorInput}} input
+ * @param {{ isAuth: any; }} context
+ * @returns {Promise<Floor?>}
+ */
 export async function createFloor({
   createFloorInput: { name, id, buildingId, image, isDeleted, nodes }
 }, context) {

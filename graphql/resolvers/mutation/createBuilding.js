@@ -5,6 +5,12 @@ const BuildingModel = model("Building", buildingSchema)
 import Building from "../building.js"
 import { createLog, formatModel } from "../../../utils/createLog.js"
 
+/**
+ * 
+ * @param {{createBuildingInput: import("../schema.d.ts").CreateBuildingInput}} param0 
+ * @param {*} context 
+ * @returns {Promise<Building>}
+ */
 export async function createBuilding({ createBuildingInput: { name } }, context) {
   if (!context?.isAuth) throw new Error("Error creating Building. You are not authenticated.")
 

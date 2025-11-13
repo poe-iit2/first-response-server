@@ -6,6 +6,7 @@ const NodeModel = model("Node", nodeSchema)
 
 // Define a 'Node' class to encapsulate node-related operations and data
 export default class Node {
+  direction;
 
   static async build(nodeId, context) {
     if (!context?.isAuth) throw new Error("Error retrieving Node data. You are not authenticated.")

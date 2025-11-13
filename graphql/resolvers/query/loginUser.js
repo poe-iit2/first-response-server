@@ -10,6 +10,12 @@ const UserModel = model("User", userSchema)
 
 // Define an asynchronous function to authenticate a user based on the provided 'email' and 'password'
 // The function expects an object with an 'email' and 'password' property
+/**
+ * 
+ * @param {{email: string, password: string}} param0 
+ * @param {*} context 
+ * @returns {Promise<import("../schema.d.ts").Login>}
+ */
 export async function loginUser({ email, password }, context) {
   let user = await UserModel.findOne({ email })
 
@@ -43,10 +49,9 @@ export async function loginUser({ email, password }, context) {
   }
 
   // user, token, expiration
-  user = new User(user, context)
   return {
     token,
     expiresIn,
-    user
+    user: new User(user, context)
   }
 }

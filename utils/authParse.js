@@ -35,7 +35,7 @@ export default function authParse(req) {
   }
 
   // Verify the token using the secret stored in environment variables
-  verify(token, process.env.ACCESS_SECRET, (err, user) => {
+  verify(token, process.env.ACCESS_SECRET || "", (err, user) => {
     // If the token is invalid, set isAuth to false and proceed to the next middleware
     if (err) {
       req.isAuth = false

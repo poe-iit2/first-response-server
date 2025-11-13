@@ -6,6 +6,11 @@ const BuildingModel = model("Building", buildingSchema)
 import Building from "../building.js"
 
 // Define an asynchronous function to fetch all buildings
+/**
+ * @param {any} _
+ * @param {any} context
+ * @returns {Promise<Array<Building>>}
+ */
 export async function getBuildings(_, context) {
   if (!context?.isAuth) throw new Error("Error retrieving Building data. You are not authenticated.")
   const buildings = await BuildingModel.find() || []

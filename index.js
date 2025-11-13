@@ -69,7 +69,7 @@ app.use("/graphql", graphqlHTTP((req, res) => ({
 })))
 
 // Connect to MongoDB using the conntextion string from environment variables
-connect(process.env.DATABASE_URL).then(() => {
+connect(process.env.DATABASE_URL || "").then(() => {
   console.log("MongoDB connected")
 
   // Start the HTTP server and listen on the specified PORT

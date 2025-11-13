@@ -7,6 +7,13 @@ import Floor from "../floor.js"
 import { createLog, formatModel, updateLog } from "../../../utils/createLog.js"
 import Building from "../building.js"
 
+/**
+ * 
+ * @param {{
+ *  updateFloorInput: import("../schema.d.ts").UpdateFloorInput}} param0 
+ * @param {*} context 
+ * @returns {Promise<Floor?>}
+ */
 export async function updateFloor({
   updateFloorInput: { id, name, buildingId, image, isDeleted }
 }, context) {
@@ -15,7 +22,7 @@ export async function updateFloor({
   try {
 
     const floor = await FloorModel.findById(id)
-    const currentBuilding = await build(floor.building, context)
+    const currentBuilding = await Building.build(floor.building, context)
 
     if (!floor) {
       throw new Error(`Floor ${id} not found`)
